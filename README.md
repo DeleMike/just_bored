@@ -6,5 +6,8 @@ The idea is you are kind of tired, maybe you have done a lot today(good!), and y
 
 Note the conversations MIGHT BE LIMITED
 
-Design inspiration from [here](https://dribbble.com/shots/19206709-Mental-Health-App-Design?utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share)
+Design inspiration from [Dribble](https://dribbble.com/shots/19206709-Mental-Health-App-Design?utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share)
 
+Icons were gotten freely from [Flaticon](https://www.flaticon.com/)
+
+Potential Songs: 2002(Konteks)

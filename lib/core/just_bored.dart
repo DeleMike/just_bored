@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../configs/app_theme.dart';
+import '../configs/constants.dart';
 
 class JustBored extends StatelessWidget {
   const JustBored({super.key});
@@ -6,11 +8,10 @@ class JustBored extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: kAppName,
+      theme: AppTheme(context).themeData(false),
+      home: const MyHomePage(title: kAppName),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -36,9 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: kCanvasColor,
+        ),
       ),
     );
   }
