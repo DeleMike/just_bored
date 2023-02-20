@@ -1,16 +1,10 @@
-# just_bored
+# Just Bored 
 
-A new Flutter project.
+A mental health app made to keep you calm, bored and probably fall asleep!
 
-## Getting Started
+The idea is you are kind of tired, maybe you have done a lot today(good!), and you feel like sharing with someone how you feel. Well we are here for you! Just set your mood, have an engaging conversation with our system, hear jokes, solve a riddle, hear some intersting facts have some reflection (Reflection > Reputation), and many more!
 
-This project is a starting point for a Flutter application.
+Note the conversations MIGHT BE LIMITED
 
-A few resources to get you started if this is your first Flutter project:
+Design inspiration from [here](https://dribbble.com/shots/19206709-Mental-Health-App-Design?utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
