@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 /// Defines the app's name
 const String kAppName = 'Just Bored';
@@ -60,8 +61,25 @@ Orientation kGetOrientation(BuildContext context) {
   return MediaQuery.of(context).orientation;
 }
 
+/// Show toast with [message]
+void showToast(String message, {wantsLongText = false}) {
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: wantsLongText ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: kPrimaryColor,
+      textColor: kWhite,
+      fontSize: 16.0);
+}
+
 /// Assets images
-class AssetsImages {}
+class AssetsImages {
+  static const String onboardingImgOne = 'assets/images/onboarding/illustration_peace.png';
+  static const String onboardingImgTwo = 'assets/images/onboarding/illustration_calm.png';
+  static const String onboardingImgThree = 'assets/images/onboarding/illustration_bored.png';
+  static const String authBgImg = 'assets/images/auth/auth_pic.png';
+}
 
 /// Assets Animations
 class AssetsAnimations {}
