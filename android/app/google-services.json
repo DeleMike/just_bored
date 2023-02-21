@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "233393660914",
+    "project_id": "just-bored",
+    "storage_bucket": "just-bored.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233393660914:android:b71399a97c5dd56de7816b",
+        "android_client_info": {
+          "package_name": "com.mikeinvents.just_bored"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233393660914-7b9pqstp0d4cbj3kp94reivm99shmlle.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNgMS1paqN_c6G01iFyDJLmFzlwUrF9B4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233393660914-7b9pqstp0d4cbj3kp94reivm99shmlle.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "233393660914-edr1gr5ke5smrr95v9clpe1d8g7r15d5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mikeinvents.justBored"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

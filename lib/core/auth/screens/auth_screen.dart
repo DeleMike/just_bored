@@ -34,8 +34,8 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Container(
                 constraints: BoxConstraints(
                     maxHeight: context.watch<AuthController>().wantsToLogin
-                        ? kScreenHeight(context) * 0.60
-                        : kScreenHeight(context) * 0.80,
+                        ? kScreenHeight(context) * 0.64
+                        : kScreenHeight(context) * 0.90,
                     maxWidth: kScreenWidth(context) * 0.85),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.0),
