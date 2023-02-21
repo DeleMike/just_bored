@@ -30,7 +30,7 @@ class AppTheme {
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: kPrimaryColor),
-      colorScheme: const ColorScheme.light(primary: Colors.indigo).copyWith(secondary: kPrimaryColor),
+      colorScheme: const ColorScheme.light(primary: Color(0xFF17253D)).copyWith(secondary: kPrimaryColor),
       buttonTheme: ButtonTheme.of(context).copyWith(
         buttonColor: kPrimaryColor,
         textTheme: ButtonTextTheme.primary,
@@ -48,45 +48,48 @@ class AppTheme {
         }),
       ),
       textTheme: ThemeData.light().textTheme.copyWith(
-            bodySmall: const TextStyle(
+            bodySmall: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.w400,
               fontSize: 12,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
             ),
-            bodyMedium: const TextStyle(
+            bodyMedium: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.w500,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontSize: 14,
             ),
-            bodyLarge: const TextStyle(
+            bodyLarge: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.w500,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontSize: 16,
             ),
-            displayLarge: const TextStyle(
+            displayLarge: TextStyle(
               fontSize: 57,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.normal,
               color: kWhite,
             ),
-            titleLarge: const TextStyle(
+            titleLarge: TextStyle(
               fontSize: 22,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.bold,
             ),
-            headlineLarge: const TextStyle(
+            headlineLarge: TextStyle(
               fontSize: 32,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.w400,
             ),
-            headlineMedium: const TextStyle(
+            headlineMedium: TextStyle(
               fontSize: 28,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.w400,
             ),
-            headlineSmall: const TextStyle(
+            headlineSmall: TextStyle(
               fontSize: 24,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -122,45 +125,48 @@ class AppTheme {
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(color: kWhite),
       textTheme: ThemeData.light().textTheme.copyWith(
-            bodySmall: const TextStyle(
+            bodySmall: TextStyle(
               color: kWhite,
               fontWeight: FontWeight.w400,
               fontSize: 12,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
             ),
-            bodyMedium: const TextStyle(
+            bodyMedium: TextStyle(
               color: kWhite,
               fontWeight: FontWeight.w500,
               fontSize: 14,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
             ),
-            bodyLarge: const TextStyle(
+            bodyLarge: TextStyle(
               color: kWhite,
               fontWeight: FontWeight.w500,
               fontSize: 16,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
             ),
-            displayLarge: const TextStyle(
+            displayLarge: TextStyle(
               fontSize: 57,
-              fontFamily: 'Quicksand',
               fontWeight: FontWeight.normal,
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               color: kWhite,
             ),
-            titleLarge: const TextStyle(
+            titleLarge: TextStyle(
               fontSize: 22,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.bold,
             ),
-            headlineLarge: const TextStyle(
+            headlineLarge: TextStyle(
               fontSize: 32,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.w400,
             ),
-            headlineMedium: const TextStyle(
+            headlineMedium: TextStyle(
               fontSize: 28,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.w400,
             ),
-            headlineSmall: const TextStyle(
+            headlineSmall: TextStyle(
               fontSize: 24,
-              fontFamily: 'Quicksand',
+              fontFamily: GoogleFonts.quicksand().fontFamily,
               fontWeight: FontWeight.w400,
             ),
           ),

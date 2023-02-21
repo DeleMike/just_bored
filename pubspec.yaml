@@ -39,6 +39,8 @@ dependencies:
   google_fonts: ^4.0.3
   smooth_page_indicator: ^1.0.1
   fluttertoast: ^8.2.1
+  shared_preferences: ^2.0.17
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

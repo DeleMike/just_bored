@@ -79,6 +79,8 @@ class AssetsImages {
   static const String onboardingImgTwo = 'assets/images/onboarding/illustration_calm.png';
   static const String onboardingImgThree = 'assets/images/onboarding/illustration_bored.png';
   static const String authBgImg = 'assets/images/auth/auth_pic.png';
+  static const String logoImg = 'assets/images/dashboard/mental_health.png';
+  static const String googleIcon = 'assets/images/auth/google_icon.png';
 }
 
 /// Assets Animations

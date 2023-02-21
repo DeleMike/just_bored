@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../configs/constants.dart';
+import '../../configs/routes.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             _View(
               imgPath: AssetsImages.onboardingImgTwo,
               viewName: 'Calm.',
-              tagLine: 'Find peace in the calm',
+              tagLine: 'Find peace in the calm.',
             ),
 
             //third page
@@ -76,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     shape: const CircleBorder(),
                   ),
                   onPressed: () {
-                    showToast('Go to login');
+                    Navigator.of(context).pushNamed(Routes.auth);
                   },
                   child: const Icon(Icons.arrow_forward),
                 ),
@@ -114,7 +115,7 @@ class _View extends StatelessWidget {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-             CircleAvatar(
+            CircleAvatar(
               radius: 100,
               backgroundImage: AssetImage(imgPath),
               backgroundColor: kTransparent,
