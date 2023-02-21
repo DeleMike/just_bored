@@ -183,7 +183,10 @@ class _RegisterFormState extends State<RegisterForm> {
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                authReader.createUserWithEmailAndPassword(
+                    context: context, data: _userData, formKey: _formKey);
+              },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
@@ -214,7 +217,9 @@ class _RegisterFormState extends State<RegisterForm> {
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                authReader.createUserWithGoogleAcct();
+              },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(

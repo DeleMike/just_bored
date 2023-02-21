@@ -85,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
                 if (value!.isEmpty) {
                   return 'Password cannot be empty';
                 }
-      
+
                 if (!value.isValidPassword) {
                   return 'Invalid password';
                 }
@@ -107,7 +107,10 @@ class _LoginFormState extends State<LoginForm> {
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                authReader.loginUserWithEmailAndPassword(
+                    context: context, data: _userData, formKey: _formKey);
+              },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
@@ -138,7 +141,9 @@ class _LoginFormState extends State<LoginForm> {
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                authReader.loginUserWithGoogleAcct(context: context);
+              },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(

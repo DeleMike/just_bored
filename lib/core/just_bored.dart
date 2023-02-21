@@ -16,7 +16,7 @@ class JustBored extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: kLightPrimaryColor),
+      const SystemUiOverlayStyle(statusBarColor: kTransparent),
     );
     return MultiProvider(
       providers: [
