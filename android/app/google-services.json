@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "233393660914-7b9pqstp0d4cbj3kp94reivm99shmlle.apps.googleusercontent.com",
+          "client_id": "233393660914-pul5dtuc502aat3o6ge43nuabhh3s629.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mikeinvents.just_bored",
+            "certificate_hash": "5b5783f1780466eaa68335b17190d744e42cca86"
+          }
+        },
+        {
+          "client_id": "233393660914-hvcnol00eh7tsuf67o3b8k0oe78hjh10.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
