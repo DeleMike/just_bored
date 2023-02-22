@@ -99,26 +99,30 @@ class _LoginFormState extends State<LoginForm> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPaddingM, vertical: kPaddingS - 4),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kPrimaryColor,
-                minimumSize: Size(kScreenWidth(context) * 0.8, 52),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-              ),
-              onPressed: () async {
-                authReader.loginUserWithEmailAndPassword(
-                    context: context, data: _userData, formKey: _formKey);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  'LOGIN',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
-                ),
-              ),
-            ),
+            child: 
+            // authWatcher.isAuthenticating
+            //     ? const Center(child: CircularProgressIndicator())
+            //     : 
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kPrimaryColor,
+                      minimumSize: Size(kScreenWidth(context) * 0.8, 52),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    onPressed: () async {
+                      await authReader.loginUserWithEmailAndPassword(
+                          context: context, data: _userData, formKey: _formKey);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        'LOGIN',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
+                      ),
+                    ),
+                  ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

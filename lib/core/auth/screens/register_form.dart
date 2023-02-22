@@ -22,9 +22,18 @@ class _RegisterFormState extends State<RegisterForm> {
 
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _userData = {};
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authReader = context.read<AuthController>();
+    final authWatcher = context.watch<AuthController>();
+
     return Form(
       key: _formKey,
       child: Column(
@@ -34,6 +43,8 @@ class _RegisterFormState extends State<RegisterForm> {
             child: TextFormField(
               key: const ValueKey('name'),
               keyboardType: TextInputType.name,
+              textCapitalization: TextCapitalization.words,
+              //textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
                 labelText: 'Full name',
@@ -53,8 +64,11 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
                 return null;
               },
+              // onFieldSubmitted: (value) {
+              //   FocusScope.of(context).nextFocus();
+              // },
               onSaved: (value) {
-                _userData['name'] = value;
+                _userData['fullname'] = value;
                 FocusManager.instance.primaryFocus?.unfocus();
               },
             ),
@@ -64,6 +78,7 @@ class _RegisterFormState extends State<RegisterForm> {
             child: TextFormField(
               key: const ValueKey('email'),
               keyboardType: TextInputType.emailAddress,
+              // textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
                 labelText: 'Email',
@@ -83,6 +98,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
                 return null;
               },
+              // onFieldSubmitted: (value) {
+              //   FocusScope.of(context).nextFocus();
+              // },
               onSaved: (value) {
                 _userData['email'] = value;
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -95,6 +113,7 @@ class _RegisterFormState extends State<RegisterForm> {
               controller: _passwordController,
               key: const ValueKey('password'),
               keyboardType: TextInputType.visiblePassword,
+              // textInputAction: TextInputAction.next,
               obscureText: _obscureText,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
@@ -124,6 +143,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
                 return null;
               },
+              // onFieldSubmitted: (value) {
+              //   FocusScope.of(context).nextFocus();
+              // },
               onSaved: (value) {
                 _userData['password'] = value;
                 FocusManager.instance.primaryFocus?.unfocus();
@@ -135,6 +157,7 @@ class _RegisterFormState extends State<RegisterForm> {
             child: TextFormField(
               key: const ValueKey('c_password'),
               keyboardType: TextInputType.visiblePassword,
+              // textInputAction: TextInputAction.done,
               obscureText: _obscureText2,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
@@ -184,7 +207,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
               ),
               onPressed: () async {
-                authReader.createUserWithEmailAndPassword(
+                await authReader.createUserWithEmailAndPassword(
                     context: context, data: _userData, formKey: _formKey);
               },
               child: Padding(
@@ -209,7 +232,11 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPaddingM, vertical: kPaddingS - 4),
-            child: ElevatedButton(
+            child:
+            //  authWatcher.isAuthenticating
+            //     ? const Center(child: CircularProgressIndicator())
+            //     :
+                 ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: kWhite,
                 minimumSize: Size(kScreenWidth(context) * 0.8, 52),

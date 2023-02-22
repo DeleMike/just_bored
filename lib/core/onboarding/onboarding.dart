@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:just_bored/local/onboarding_prefs.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../configs/constants.dart';
@@ -77,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     shape: const CircleBorder(),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.auth);
+                    context.read<OnboardingPrefs>().saveOnBoardingViewStatus();
                   },
                   child: const Icon(Icons.arrow_forward),
                 ),

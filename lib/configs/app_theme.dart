@@ -14,6 +14,7 @@ class AppTheme {
   /// Constructs an [AppTheme].
   AppTheme(BuildContext context) {
     lightTheme = ThemeData(
+      useMaterial3: true,
       fontFamily: GoogleFonts.quicksand().fontFamily,
       brightness: Brightness.light,
       primaryColor: kPrimaryColor,
@@ -96,6 +97,7 @@ class AppTheme {
     );
 
     darkTheme = ThemeData(
+      useMaterial3: true,
       fontFamily: GoogleFonts.quicksand().fontFamily,
       brightness: Brightness.dark,
       primaryColor: kPrimaryColor,

@@ -10,6 +10,12 @@ const String kAppVersion = '1.0.0';
 /// Theme font
 const String kFontFamily = 'prompt';
 
+/// navigator key
+final navigatorKey = GlobalKey<NavigatorState>();
+
+/// messenger key
+final messengerKey = GlobalKey<ScaffoldMessengerState>();
+
 // Colors
 const Color kWhite = Color(0xFFFFFFFF);
 const Color kBlack = Color(0xFF000000);
@@ -59,6 +65,26 @@ double kScreenWidth(BuildContext context) {
 /// Get screen orientation
 Orientation kGetOrientation(BuildContext context) {
   return MediaQuery.of(context).orientation;
+}
+
+/// show Snackbar
+void showASnackbar(BuildContext context, String message, [Color? color]) {
+  final snackbar = SnackBar(
+    backgroundColor: color ?? kPrimaryColor,
+    shape:  RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(kMediumRadius)
+    ),
+    behavior: SnackBarBehavior.floating,
+    showCloseIcon: true,
+    content: Text(
+      message,
+      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
+    ),
+  );
+
+  messengerKey.currentState!
+    ..removeCurrentSnackBar()
+    ..showSnackBar(snackbar);
 }
 
 /// Show toast with [message]
