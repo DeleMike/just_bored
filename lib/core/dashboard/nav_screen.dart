@@ -1,3 +1,5 @@
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../configs/constants.dart';
@@ -16,9 +18,10 @@ class NavScreen extends StatefulWidget {
 
 class _NavScreenState extends State<NavScreen> {
   int _selectedIndex = 0;
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   static List<Widget> _navScreens = [];
-  static List<BottomNavigationBarItem> _navBarItems = [];
+  static List<CurvedNavigationBarItem> _navBarItems = [];
 
   @override
   void didChangeDependencies() {
@@ -31,11 +34,18 @@ class _NavScreenState extends State<NavScreen> {
     ];
 
     _navBarItems = const [
-      BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-      
-      BottomNavigationBarItem(icon: Icon(Icons.assistant), label: 'You & AI'),
-     
-      BottomNavigationBarItem(icon: Icon(Icons.person_2), label: 'Personal'),
+      CurvedNavigationBarItem(
+        child: Icon(Icons.home_filled, color: kLightPrimaryColor),
+        label: 'Home',
+      ),
+      CurvedNavigationBarItem(
+        child: Icon(Icons.assistant, color: kLightPrimaryColor),
+        label: 'AI & You',
+      ),
+      CurvedNavigationBarItem(
+        child: Icon(Icons.person_2, color: kLightPrimaryColor),
+        label: 'Personal',
+      ),
     ];
   }
 
@@ -52,13 +62,15 @@ class _NavScreenState extends State<NavScreen> {
         index: _selectedIndex,
         children: _navScreens,
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: CurvedNavigationBar(
+        key: _bottomNavigationKey,
         items: _navBarItems,
-        type: BottomNavigationBarType.shifting,
-        elevation: 0,
-        currentIndex: _selectedIndex,
-        unselectedItemColor: blueThreeVariantColor,
-        selectedItemColor: Theme.of(context).brightness == Brightness.dark ? kWhite : kPrimaryColor,
+        backgroundColor: kTransparent,
+        animationDuration: const Duration(milliseconds: 400),
+        animationCurve: Curves.ease,
+        iconPadding: kPaddingM,
+        height: kBottomNavigationBarHeight + 10,
+        buttonBackgroundColor: kAccentColor,
         onTap: _onItemTapped,
       ),
     );

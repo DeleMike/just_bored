@@ -6,26 +6,30 @@ import '../core/auth/providers/auth_controller.dart';
 import 'logout_dialog.dart';
 
 /// General app bar
-class FarmAppbar extends StatelessWidget implements PreferredSizeWidget {
+class JBAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String headerText;
   final bool needsABackButton;
   final bool? actionCameFromAppBar;
   final void Function()? handleBackButtonPress;
+  final Color? color;
+  final Color? iconColor;
 
   /// General app bar
-  const FarmAppbar(
-      {Key? key,
-      required this.headerText,
-      required this.needsABackButton,
-      this.actionCameFromAppBar,
-      this.handleBackButtonPress})
-      : super(key: key);
+  const JBAppbar({
+    Key? key,
+    required this.headerText,
+    required this.needsABackButton,
+    this.actionCameFromAppBar,
+    this.handleBackButtonPress,
+    this.color,
+    this.iconColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: AppBar(
-        backgroundColor: kWhite,
+        backgroundColor: color ?? kWhite,
         elevation: 0,
         shadowColor: kPrimaryColor,
         title: Text(
@@ -33,18 +37,18 @@ class FarmAppbar extends StatelessWidget implements PreferredSizeWidget {
           maxLines: 1,
           overflow: TextOverflow.fade,
           softWrap: true,
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(fontSize: 18, fontWeight: FontWeight.bold, color: iconColor),
         ),
         leading: needsABackButton
             ? IconButton(
                 // perform normal back button press if there is no custom function given
                 onPressed: handleBackButtonPress ?? () => Navigator.pop(context),
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back_outlined,
-                  color: kBlack,
+                  color: iconColor ?? kBlack,
                 ))
             : null,
         actions: (actionCameFromAppBar != null && actionCameFromAppBar!)
@@ -60,9 +64,9 @@ class FarmAppbar extends StatelessWidget implements PreferredSizeWidget {
                       await context.read<AuthController>().logout(context);
                     }
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.logout_outlined,
-                    color: kDefaultIconDarkColor,
+                    color: iconColor ?? kDefaultIconDarkColor,
                   ),
                 ),
               ],
