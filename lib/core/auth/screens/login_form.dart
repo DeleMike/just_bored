@@ -146,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
               onPressed: () async {
-                authReader.loginUserWithGoogleAcct(context: context);
+                await authReader.createUserOrSignInWithGoogleAcct(context: context);
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),

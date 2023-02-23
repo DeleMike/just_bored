@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:just_bored/configs/constants.dart';
 
 import '../../../configs/debug_fns.dart';
@@ -65,9 +66,38 @@ class AuthController with ChangeNotifier {
     }
   }
 
-  /// register user with google social
-  void createUserWithGoogleAcct() {
-    printOut('Google Register', 'AuthController');
+  /// register user and sign with Federated identity & social sign-in using Google
+  Future<void> createUserOrSignInWithGoogleAcct({required BuildContext context}) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // sign in the user.
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      showASnackbar(context, e.message ?? 'An error occurred while creating your account', kRed);
+    } catch (e, s) {
+      printOut(e);
+      printOut(s);
+    }
+    //_isAuthenticating = false;
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
   /// user email-password sign in
@@ -111,13 +141,6 @@ class AuthController with ChangeNotifier {
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
       //notifyListeners();
     }
-  }
-
-  /// user google sign in
-  void loginUserWithGoogleAcct({
-    required BuildContext context,
-  }) {
-    printOut('Google Sign In', 'AuthController');
   }
 
   /// sign out user from the app

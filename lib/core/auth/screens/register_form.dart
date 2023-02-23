@@ -245,7 +245,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
               ),
               onPressed: () async {
-                authReader.createUserWithGoogleAcct();
+                await authReader.createUserOrSignInWithGoogleAcct(context: context);
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),

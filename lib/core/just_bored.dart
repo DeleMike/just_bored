@@ -56,6 +56,7 @@ class JustBored extends StatelessWidget {
                         return const Center(
                             child: Text('Something went wrong while trying to sign you in...'));
                       } else if (snapshot.hasData) {
+                        // save user data props
                         return NavScreen(email: snapshot.data!.email ?? 'No email found');
                       } else {
                         return const AuthScreen();
