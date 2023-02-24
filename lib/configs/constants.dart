@@ -105,6 +105,10 @@ class AssetsImages {
   static const String authBgImg = 'assets/images/auth/auth_pic.png';
   static const String logoImg = 'assets/images/dashboard/mental_health.png';
   static const String googleIcon = 'assets/images/auth/google_icon.png';
+  static const String happyEmoji = 'assets/images/emojis/happy.png';
+  static const String sadEmoji = 'assets/images/emojis/sad.png';
+  static const String loveEmoji = 'assets/images/emojis/in_love.png';
+  static const String depressedEmoji = 'assets/images/emojis/depression.png';
 }
 
 /// Assets Animations
