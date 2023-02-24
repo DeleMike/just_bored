@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:just_bored/configs/debug_fns.dart';
 import 'package:just_bored/configs/routes.dart';
 import 'package:just_bored/core/auth/providers/auth_controller.dart';
 import 'package:just_bored/core/auth/screens/auth_screen.dart';
+import 'package:just_bored/local/profile_prefs.dart';
 import 'package:provider/provider.dart';
 
 import '../local/onboarding_prefs.dart';
@@ -16,6 +18,10 @@ import 'onboarding/onboarding.dart';
 class JustBored extends StatelessWidget {
   const JustBored({super.key});
 
+  void save(BuildContext context, dynamic data) async {
+    await context.read<ProfilePrefs>().saveUser(data);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -25,6 +31,9 @@ class JustBored extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => OnboardingPrefs(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => ProfilePrefs(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => AuthController(),
@@ -57,6 +66,8 @@ class JustBored extends StatelessWidget {
                             child: Text('Something went wrong while trying to sign you in...'));
                       } else if (snapshot.hasData) {
                         // save user data props
+                        save(context, snapshot.data);
+                        printOut(snapshot.data!.toString(), 'Home');
                         return const NavScreen();
                       } else {
                         return const AuthScreen();

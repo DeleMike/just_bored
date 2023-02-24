@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:just_bored/configs/constants.dart';
+import 'package:just_bored/core/auth/providers/auth_controller.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../local/profile_prefs.dart';
 import '../../../../widgets/jb_app_bar.dart';
 
 /// Home screen view
@@ -14,6 +18,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedMood = '';
+  Map<String, dynamic> user = {};
+
+  void _init() async {
+    //await context.read<ProfilePrefs>().getUser();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   /// for mood change
   ///
@@ -47,120 +62,143 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: kScreenHeight(context) * 0.8,
                 width: kScreenWidth(context),
                 decoration: const BoxDecoration(color: kPrimaryColor),
-                child: const FlutterLogo(
-                  size: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(kPaddingM),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome back, ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(fontWeight: FontWeight.w900, color: kWhite),
+                      ),
+                      Text(
+                        context.watch<ProfilePrefs>().userProfile['display_name'] ??
+                            (context.watch<AuthController>().fullname.isEmpty
+                                ? 'Default'
+                                : context.watch<AuthController>().fullname),
+                        style:
+                            Theme.of(context).textTheme.headlineSmall!.copyWith(fontSize: 26, color: kWhite),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: kPaddingS),
+                        child: Text(
+                          'Take care of your mind, it\'s the most important thing you\'ll ever own.',
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: kScreenHeight(context) * 0.45,
-                    width: kScreenWidth(context),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadiusDirectional.only(
-                        topStart: Radius.circular(kMediumRadius),
-                        topEnd: Radius.circular(kMediumRadius),
+              child: SingleChildScrollView(
+                child: Container(
+                  height: kScreenHeight(context) * 0.45,
+                  width: kScreenWidth(context),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.only(
+                      topStart: Radius.circular(kMediumRadius),
+                      topEnd: Radius.circular(kMediumRadius),
+                    ),
+                    color: kCanvasColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: kPaddingS),
+                          width: kScreenWidth(context) * 0.15,
+                          height: 5,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(kMediumRadius),
+                            ),
+                            color: kPrimaryColor,
+                          ),
+                        ),
                       ),
-                      color: kCanvasColor,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Container(
-                            margin: const EdgeInsets.only(top: kPaddingS),
-                            width: kScreenWidth(context) * 0.15,
-                            height: 5,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(kMediumRadius),
-                              ),
-                              color: kPrimaryColor,
+                      Padding(
+                        padding: const EdgeInsets.all(kPaddingM),
+                        child: Text(
+                          'Daily Mood Log',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 18, fontWeight: FontWeight.w900, color: kPrimaryColor),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: _Mood(
+                              emojiImgPath: AssetsImages.loveEmoji,
+                              emojiName: 'Love',
+                              width: kScreenWidth(context) * 0.1,
+                              selected: _selectedMood == 'Love',
+                              onSelected: () => _selectMood('Love'),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(kPaddingM),
-                          child: Text(
-                            'Daily Mood Log',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(fontSize: 18, fontWeight: FontWeight.w900, color: kPrimaryColor),
+                          Expanded(
+                            child: _Mood(
+                              emojiImgPath: AssetsImages.happyEmoji,
+                              emojiName: 'Happy',
+                              width: kScreenWidth(context) * 0.1,
+                              selected: _selectedMood == 'Happy',
+                              onSelected: () => _selectMood('Happy'),
+                            ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: _Mood(
-                                emojiImgPath: AssetsImages.loveEmoji,
-                                emojiName: 'Love',
-                                width: kScreenWidth(context) * 0.1,
-                                selected: _selectedMood == 'Love',
-                                onSelected: () => _selectMood('Love'),
-                              ),
+                          Expanded(
+                            child: _Mood(
+                              emojiImgPath: AssetsImages.sadEmoji,
+                              emojiName: 'Sad',
+                              width: kScreenWidth(context) * 0.1,
+                              selected: _selectedMood == 'Sad',
+                              onSelected: () => _selectMood('Sad'),
                             ),
-                            Expanded(
-                              child: _Mood(
-                                emojiImgPath: AssetsImages.happyEmoji,
-                                emojiName: 'Happy',
-                                width: kScreenWidth(context) * 0.1,
-                                selected: _selectedMood == 'Happy',
-                                onSelected: () => _selectMood('Happy'),
-                              ),
-                            ),
-                            Expanded(
-                              child: _Mood(
-                                emojiImgPath: AssetsImages.sadEmoji,
-                                emojiName: 'Sad',
-                                width: kScreenWidth(context) * 0.1,
-                                selected: _selectedMood == 'Sad',
-                                onSelected: () => _selectMood('Sad'),
-                              ),
-                            ),
-                            Expanded(
-                              child: _Mood(
-                                emojiImgPath: AssetsImages.depressedEmoji,
-                                emojiName: 'Depress',
-                                width: kScreenWidth(context) * 0.1,
-                                selected: _selectedMood == 'Depress',
-                                onSelected: () => _selectMood('Depress'),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: kPaddingM, right: kPaddingM, top: kPaddingM),
-                          child: Text(
-                            'Daily Reflection',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(fontSize: 18, fontWeight: FontWeight.w900, color: kPrimaryColor),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: kPaddingM),
-                          child: Text(
-                            'How do you feel about your current emotions?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontSize: 14, color: kBlueThreeVariantColor),
+                          Expanded(
+                            child: _Mood(
+                              emojiImgPath: AssetsImages.depressedEmoji,
+                              emojiName: 'Depress',
+                              width: kScreenWidth(context) * 0.1,
+                              selected: _selectedMood == 'Depress',
+                              onSelected: () => _selectMood('Depress'),
+                            ),
                           ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: kPaddingM, right: kPaddingM, top: kPaddingM),
+                        child: Text(
+                          'Daily Reflection',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 18, fontWeight: FontWeight.w900, color: kPrimaryColor),
                         ),
-                        Padding(
-                         padding: const EdgeInsets.only(left: kPaddingM, right: kPaddingM, top: kPaddingM),
-                          child: _ReflectionInput(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: kPaddingM),
+                        child: Text(
+                          'How do you feel about your current emotions?',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(fontSize: 14, color: kBlueThreeVariantColor),
                         ),
-                        
-              
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: kPaddingM, right: kPaddingM, top: kPaddingM),
+                        child: _ReflectionInput(),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -242,7 +280,7 @@ class _ReflectionInput extends StatelessWidget {
       child: Row(
         children: [
           Flexible(
-           fit: FlexFit.loose,
+            fit: FlexFit.loose,
             child: SizedBox(
               //width: kScreenWidth(context) * 0.7,
               child: SingleChildScrollView(
@@ -269,7 +307,7 @@ class _ReflectionInput extends StatelessWidget {
                     if (value!.isEmpty) {
                       return 'You cannot send reflection';
                     }
-                        
+
                     return null;
                   },
                   onSaved: (value) {},
@@ -287,9 +325,12 @@ class _ReflectionInput extends StatelessWidget {
                 shape: const CircleBorder(),
               ),
               onPressed: () {},
-              child: const Icon(Icons.send_outlined, color: kWhite,),
+              child: const Icon(
+                Icons.send_outlined,
+                color: kWhite,
+              ),
             ),
-           ),
+          ),
         ],
       ),
     );
