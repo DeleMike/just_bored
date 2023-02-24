@@ -46,6 +46,7 @@ dependencies:
   google_sign_in: ^6.0.1
   curved_navigation_bar: ^1.0.3
   curved_labeled_navigation_bar: ^2.0.2
+  lottie: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -76,5 +77,6 @@ flutter:
     - assets/images/emojis/
     - assets/images/dashboard/
     - assets/images/auth/
+    - assets/animations/
 
     

@@ -32,7 +32,6 @@ class _RegisterFormState extends State<RegisterForm> {
   @override
   Widget build(BuildContext context) {
     final authReader = context.read<AuthController>();
-    final authWatcher = context.watch<AuthController>();
 
     return Form(
       key: _formKey,

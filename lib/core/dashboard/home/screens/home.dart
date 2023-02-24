@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:just_bored/configs/constants.dart';
 import 'package:just_bored/core/auth/providers/auth_controller.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../configs/debug_fns.dart';
 import '../../../../local/profile_prefs.dart';
 import '../../../../widgets/jb_app_bar.dart';
 
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       _selectedMood = mood;
     }
+    printOut('Update Db', 'Home Screen');
     setState(() {});
   }
 
@@ -62,19 +64,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: kScreenHeight(context) * 0.8,
                 width: kScreenWidth(context),
                 decoration: const BoxDecoration(color: kPrimaryColor),
-                child: Padding(
-                  padding: const EdgeInsets.all(kPaddingM),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: kPaddingM),
+                      child: Text(
                         'Welcome back, ',
                         style: Theme.of(context)
                             .textTheme
                             .headlineSmall!
                             .copyWith(fontWeight: FontWeight.w900, color: kWhite),
                       ),
-                      Text(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: kPaddingM),
+                      child: Text(
                         context.watch<ProfilePrefs>().userProfile['display_name'] ??
                             (context.watch<AuthController>().fullname.isEmpty
                                 ? 'Default'
@@ -82,15 +87,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         style:
                             Theme.of(context).textTheme.headlineSmall!.copyWith(fontSize: 26, color: kWhite),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: kPaddingS),
-                        child: Text(
-                          'Take care of your mind, it\'s the most important thing you\'ll ever own.',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: kPaddingS, left: kPaddingM, right: kPaddingM),
+                      child: Text(
+                        'Take care of your mind, it\'s the most important thing you\'ll ever own.',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: kScreenHeight(context) * 0.05),
+                    Center(
+                      child: Lottie.asset(AssetsAnimations.relaxAnim),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -272,6 +281,7 @@ class _ReflectionInput extends StatelessWidget {
   /// Displays component where users can send their reflections
   _ReflectionInput();
   final _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> _userReflection = {};
 
   @override
   Widget build(BuildContext context) {
@@ -305,12 +315,14 @@ class _ReflectionInput extends StatelessWidget {
                   textCapitalization: TextCapitalization.sentences,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'You cannot send reflection';
+                      return 'You cannot send an empty reflection';
                     }
 
                     return null;
                   },
-                  onSaved: (value) {},
+                  onSaved: (value) {
+                    _userReflection['reflection'] = value;
+                  },
                 ),
               ),
             ),
@@ -324,7 +336,13 @@ class _ReflectionInput extends StatelessWidget {
                 backgroundColor: kPrimaryColor,
                 shape: const CircleBorder(),
               ),
-              onPressed: () {},
+              onPressed: () {
+                final isValid = _formKey.currentState!.validate();
+                if (isValid) {
+                  _formKey.currentState!.save();
+                  printOut(_userReflection, 'Reflection');
+                }
+              },
               child: const Icon(
                 Icons.send_outlined,
                 color: kWhite,

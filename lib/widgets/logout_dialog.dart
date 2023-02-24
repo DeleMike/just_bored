@@ -19,7 +19,7 @@ Future<bool> logoutDialog(BuildContext context) async {
           ),
           actions: [
             ElevatedButton(
-              style: ElevatedButton.styleFrom(foregroundColor: kPrimaryColor),
+              style: ElevatedButton.styleFrom(backgroundColor: kPrimaryColor),
               child: Text(
                 'NO',
                 style: Theme.of(context)
@@ -33,7 +33,7 @@ Future<bool> logoutDialog(BuildContext context) async {
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(foregroundColor: kPrimaryColor),
+              //style: TextButton.styleFrom(foregroundColor: kPrimaryColor),
               onPressed: () {
                 closePage = true;
                  Navigator.of(context).pop();

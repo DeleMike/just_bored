@@ -112,4 +112,7 @@ class AssetsImages {
 }
 
 /// Assets Animations
-class AssetsAnimations {}
+class AssetsAnimations {
+  static const String relaxAnim = 'assets/animations/relax_anim.json';
+
+}
