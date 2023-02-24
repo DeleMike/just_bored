@@ -15,6 +15,9 @@ class AuthController with ChangeNotifier {
   bool _isAuthenticating = false;
   bool get isAuthenticating => _isAuthenticating;
 
+  String _fullname = '';
+  String get fullname => _fullname;
+
   /// set if user wants login screen or register screen
   void setLogin(bool wantsLoginScreen) {
     _wantsToLogin = !wantsLoginScreen;
@@ -49,11 +52,19 @@ class AuthController with ChangeNotifier {
       try {
         //_isAuthenticating = true;
         // clean the strings
+        _fullname = data['fullname'].toString().trim();
         String email = data['email'].toString().trim();
         String password = data['password'].toString().trim();
 
         // create user with firebase
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((credential) {
+          // Update the user's display name
+          credential.user?.updateDisplayName(_fullname);
+          FirebaseAuth.instance.currentUser?.reload();
+        });
       } on FirebaseAuthException catch (e) {
         showASnackbar(context, e.message ?? 'An error occurred while creating your account', kRed);
       } catch (e, s) {
@@ -62,7 +73,7 @@ class AuthController with ChangeNotifier {
       }
       //_isAuthenticating = false;
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
-      // notifyListeners()
+      notifyListeners();
     }
   }
 
