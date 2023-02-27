@@ -19,11 +19,11 @@ class HomeController with ChangeNotifier {
   /// else it sets that selected mood as the current mood
   void selectMood(String mood) {
     if (_selectedMood == mood) {
-      _selectedMood = '';
+      _selectedMood = 'none';
     } else {
       _selectedMood = mood;
     }
-    printOut('Update Db', 'Home Screen');
+    printOut('Update Mood = $_selectedMood', 'Home Controller');
     notifyListeners();
   }
 

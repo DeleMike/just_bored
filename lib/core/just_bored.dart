@@ -7,6 +7,7 @@ import 'package:just_bored/core/auth/providers/auth_controller.dart';
 import 'package:just_bored/core/auth/screens/auth_screen.dart';
 import 'package:just_bored/core/dashboard/ai/providers/ai_category_controller.dart';
 import 'package:just_bored/core/dashboard/home/providers/home_controller.dart';
+import 'package:just_bored/core/dashboard/personal/providers/personal_controller.dart';
 import 'package:just_bored/local/profile_prefs.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +46,9 @@ class JustBored extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => AICategoryController(),
+        ),
+         ChangeNotifierProvider(
+          create: (ctx) => PersonalController(),
         ),
       ],
       child: MaterialApp(

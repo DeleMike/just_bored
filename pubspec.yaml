@@ -78,6 +78,7 @@ flutter:
     - assets/images/dashboard/
     - assets/images/auth/
     - assets/images/ai_n_you/
+    - assets/images/personal/
     - assets/animations/
 
     

@@ -120,6 +120,11 @@ class AssetsImages {
   static const String womanHearingFacts = 'assets/images/ai_n_you/woman_facts.png';
   static const String babyLaughing = 'assets/images/ai_n_you/baby_laugh.png';
   static const String shareViews = 'assets/images/ai_n_you/man_woman_chat.png';
+
+  // -------------- persoanl screen images -----------------------
+  static const String settingsGear = 'assets/images/personal/cogwheel.png';
+  static const String reflectionIcon = 'assets/images/personal/mirror.png';
+  static const String moodLogIcon = 'assets/images/personal/mood_swings.png';
 }
 
 /// Assets Animations
