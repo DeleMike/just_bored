@@ -5,7 +5,11 @@ import 'package:just_bored/configs/constants.dart';
 
 import '../../../configs/debug_fns.dart';
 
+/// Manage user authentication & access control process
 class AuthController with ChangeNotifier {
+  /// Manage user authentication & access control process
+  AuthController();
+
   /// control user auth view
   bool _wantsToLogin = true;
 

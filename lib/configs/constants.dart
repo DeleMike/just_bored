@@ -99,20 +99,35 @@ void showToast(String message, {wantsLongText = false}) {
 
 /// Assets images
 class AssetsImages {
+  // ----------------- onboarding ----------------------------
   static const String onboardingImgOne = 'assets/images/onboarding/illustration_peace.png';
   static const String onboardingImgTwo = 'assets/images/onboarding/illustration_calm.png';
   static const String onboardingImgThree = 'assets/images/onboarding/illustration_bored.png';
+
+  // -------------- auth images ---------------------
   static const String authBgImg = 'assets/images/auth/auth_pic.png';
   static const String logoImg = 'assets/images/dashboard/mental_health.png';
   static const String googleIcon = 'assets/images/auth/google_icon.png';
+
+  // -------------- home screen emojis --------------------
   static const String happyEmoji = 'assets/images/emojis/happy.png';
   static const String sadEmoji = 'assets/images/emojis/sad.png';
   static const String loveEmoji = 'assets/images/emojis/in_love.png';
   static const String depressedEmoji = 'assets/images/emojis/depression.png';
+
+  // ----------------- ai & you images ---------------------------
+  static const String manChatting = 'assets/images/ai_n_you/man_chatting.png';
+  static const String womanHearingFacts = 'assets/images/ai_n_you/woman_facts.png';
+  static const String babyLaughing = 'assets/images/ai_n_you/baby_laugh.png';
+  static const String shareViews = 'assets/images/ai_n_you/man_woman_chat.png';
+
+  // -------------- persoanl screen images -----------------------
+  static const String settingsGear = 'assets/images/personal/cogwheel.png';
+  static const String reflectionIcon = 'assets/images/personal/mirror.png';
+  static const String moodLogIcon = 'assets/images/personal/mood_swings.png';
 }
 
 /// Assets Animations
 class AssetsAnimations {
   static const String relaxAnim = 'assets/animations/relax_anim.json';
-
 }

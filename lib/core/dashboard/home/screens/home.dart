@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_bored/configs/constants.dart';
 import 'package:just_bored/core/auth/providers/auth_controller.dart';
+import 'package:just_bored/core/dashboard/home/providers/home_controller.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -18,36 +19,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedMood = '';
-  Map<String, dynamic> user = {};
-
-  void _init() async {
-    //await context.read<ProfilePrefs>().getUser();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  /// for mood change
-  ///
-  /// if the user selects an already selected mood, it clears away
-  ///
-  /// else it sets that selected mood as the current mood
-  void _selectMood(String mood) {
-    if (_selectedMood == mood) {
-      _selectedMood = '';
-    } else {
-      _selectedMood = mood;
-    }
-    printOut('Update Db', 'Home Screen');
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
+    final homeReader = context.read<HomeController>();
+    final homeWatcher = context.watch<HomeController>();
     return Scaffold(
         backgroundColor: kWhite,
         appBar: const JBAppbar(
@@ -135,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.all(kPaddingM),
                         child: Text(
-                          'Daily Mood Log',
+                          'Mood Log',
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -150,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiImgPath: AssetsImages.loveEmoji,
                               emojiName: 'Love',
                               width: kScreenWidth(context) * 0.1,
-                              selected: _selectedMood == 'Love',
-                              onSelected: () => _selectMood('Love'),
+                              selected: homeWatcher.selectedMood == 'Love',
+                              onSelected: () => homeReader.selectMood('Love'),
                             ),
                           ),
                           Expanded(
@@ -159,8 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiImgPath: AssetsImages.happyEmoji,
                               emojiName: 'Happy',
                               width: kScreenWidth(context) * 0.1,
-                              selected: _selectedMood == 'Happy',
-                              onSelected: () => _selectMood('Happy'),
+                              selected: homeWatcher.selectedMood == 'Happy',
+                              onSelected: () => homeReader.selectMood('Happy'),
                             ),
                           ),
                           Expanded(
@@ -168,8 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiImgPath: AssetsImages.sadEmoji,
                               emojiName: 'Sad',
                               width: kScreenWidth(context) * 0.1,
-                              selected: _selectedMood == 'Sad',
-                              onSelected: () => _selectMood('Sad'),
+                              selected: homeWatcher.selectedMood == 'Sad',
+                              onSelected: () => homeReader.selectMood('Sad'),
                             ),
                           ),
                           Expanded(
@@ -177,8 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiImgPath: AssetsImages.depressedEmoji,
                               emojiName: 'Depress',
                               width: kScreenWidth(context) * 0.1,
-                              selected: _selectedMood == 'Depress',
-                              onSelected: () => _selectMood('Depress'),
+                              selected: homeWatcher.selectedMood == 'Depress',
+                              onSelected: () => homeReader.selectMood('Depress'),
                             ),
                           ),
                         ],
@@ -205,7 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: kPaddingM, right: kPaddingM, top: kPaddingM),
-                        child: _ReflectionInput(),
+                        child: _ReflectionInput(
+                          controller: homeReader,
+                        ),
                       ),
                     ],
                   ),
@@ -279,9 +256,10 @@ class _Mood extends StatelessWidget {
 /// Displays component where users can send their reflections
 class _ReflectionInput extends StatelessWidget {
   /// Displays component where users can send their reflections
-  _ReflectionInput();
+  _ReflectionInput({required this.controller});
   final _formKey = GlobalKey<FormState>();
-  final Map<String, dynamic> _userReflection = {};
+  final Map<String, String> _userReflection = {};
+  final HomeController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -297,6 +275,7 @@ class _ReflectionInput extends StatelessWidget {
                 child: TextFormField(
                   key: const ValueKey('reflection'),
                   keyboardType: TextInputType.text,
+                  minLines: 1,
                   maxLines: 3,
                   style: const TextStyle(fontSize: 12),
                   decoration: InputDecoration(
@@ -321,7 +300,11 @@ class _ReflectionInput extends StatelessWidget {
                     return null;
                   },
                   onSaved: (value) {
-                    _userReflection['reflection'] = value;
+                    if (value != null) {
+                      _userReflection['reflection'] = value;
+                    } else {
+                      printOut('Tried saving a null reflection');
+                    }
                   },
                 ),
               ),
@@ -337,11 +320,8 @@ class _ReflectionInput extends StatelessWidget {
                 shape: const CircleBorder(),
               ),
               onPressed: () {
-                final isValid = _formKey.currentState!.validate();
-                if (isValid) {
-                  _formKey.currentState!.save();
-                  printOut(_userReflection, 'Reflection');
-                }
+                controller.setUserReflection(
+                    context: context, formKey: _formKey, userReflection: _userReflection);
               },
               child: const Icon(
                 Icons.send_outlined,
