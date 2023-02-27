@@ -77,6 +77,7 @@ flutter:
     - assets/images/emojis/
     - assets/images/dashboard/
     - assets/images/auth/
+    - assets/images/ai_n_you/
     - assets/animations/
 
     
