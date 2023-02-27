@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../configs/app_extensions.dart';
 import '../../../configs/constants.dart';
 
+/// Regsiter form
 class RegisterForm extends StatefulWidget {
+  /// Regsiter form
   const RegisterForm({super.key, required this.wantsToLogin});
 
   final bool wantsToLogin;
