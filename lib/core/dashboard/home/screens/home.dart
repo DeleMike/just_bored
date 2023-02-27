@@ -19,6 +19,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void _init() {
+    context.read<HomeController>().fetchRandomTagLines();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
   @override
   Widget build(BuildContext context) {
     final homeReader = context.read<HomeController>();
@@ -66,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: kPaddingS, left: kPaddingM, right: kPaddingM),
                       child: Text(
-                        'Take care of your mind, it\'s the most important thing you\'ll ever own.',
+                        homeWatcher.tagLine,
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
                       ),
                     ),
@@ -126,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Love',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Love',
-                              onSelected: () => homeReader.selectMood('Love'),
+                              onSelected: () async => await homeReader.selectMood('Love'),
                             ),
                           ),
                           Expanded(
@@ -135,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Happy',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Happy',
-                              onSelected: () => homeReader.selectMood('Happy'),
+                              onSelected: () async  => await homeReader.selectMood('Happy'),
                             ),
                           ),
                           Expanded(
@@ -144,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Sad',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Sad',
-                              onSelected: () => homeReader.selectMood('Sad'),
+                              onSelected: () async => await homeReader.selectMood('Sad'),
                             ),
                           ),
                           Expanded(
@@ -153,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Depress',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Depress',
-                              onSelected: () => homeReader.selectMood('Depress'),
+                              onSelected: () async => await homeReader.selectMood('Depress'),
                             ),
                           ),
                         ],
