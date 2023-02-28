@@ -70,7 +70,7 @@ class AuthController with ChangeNotifier {
           FirebaseAuth.instance.currentUser?.reload();
         });
       } on FirebaseAuthException catch (e) {
-        showASnackbar(context, e.message ?? 'An error occurred while creating your account', kRed);
+        showASnackbar(context, e.message ?? 'An error occurred while creating your account', color: kRed);
       } catch (e, s) {
         printOut(e);
         printOut(s);
@@ -106,7 +106,7 @@ class AuthController with ChangeNotifier {
       // sign in the user.
       await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      showASnackbar(context, e.message ?? 'An error occurred while creating your account', kRed);
+      showASnackbar(context, e.message ?? 'An error occurred while creating your account', color: kRed);
     } catch (e, s) {
       printOut(e);
       printOut(s);
@@ -147,7 +147,7 @@ class AuthController with ChangeNotifier {
         // sign in a registered user
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       } on FirebaseAuthException catch (e) {
-        showASnackbar(context, e.message ?? 'An error occurred while creating your account', kRed);
+        showASnackbar(context, e.message ?? 'An error occurred while creating your account', color: kRed);
       } catch (e, s) {
         printOut(e);
         printOut(s);
@@ -163,7 +163,7 @@ class AuthController with ChangeNotifier {
     try {
       await FirebaseAuth.instance.signOut();
     } on FirebaseAuthException catch (e) {
-      showASnackbar(context, e.message ?? 'An error occurred while logging out. Try again.', kRed);
+      showASnackbar(context, e.message ?? 'An error occurred while logging out. Try again.', color: kRed);
     } catch (e, s) {
       printOut(e);
       printOut(s);

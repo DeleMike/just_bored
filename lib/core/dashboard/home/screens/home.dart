@@ -270,6 +270,7 @@ class _ReflectionInput extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _userReflection = {};
   final HomeController controller;
+  final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +289,7 @@ class _ReflectionInput extends StatelessWidget {
                   minLines: 1,
                   maxLines: 3,
                   style: const TextStyle(fontSize: 12),
+                  controller: textEditingController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
                     labelText: 'Reflection today?',
@@ -331,7 +333,7 @@ class _ReflectionInput extends StatelessWidget {
               ),
               onPressed: () {
                 controller.setUserReflection(
-                    context: context, formKey: _formKey, userReflection: _userReflection);
+                    context: context, formKey: _formKey, userReflection: _userReflection, controller: textEditingController);
               },
               child: const Icon(
                 Icons.send_outlined,
