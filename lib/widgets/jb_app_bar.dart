@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_bored/core/dashboard/home/providers/home_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../configs/constants.dart';
@@ -60,6 +61,9 @@ class JBAppbar extends StatelessWidget implements PreferredSizeWidget {
                     final wantsToLogout = await logoutDialog(context);
                     debugPrint('Wants To Logout: $wantsToLogout');
                     if (wantsToLogout) {
+                      // clean resources
+                        // ignore: use_build_context_synchronously
+                      context.read<HomeController>().reset();
                       // ignore: use_build_context_synchronously
                       await context.read<AuthController>().logout(context);
                     }

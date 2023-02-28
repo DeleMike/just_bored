@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 /// Defines the app's name
 const String kAppName = 'Just Bored';
@@ -68,11 +69,12 @@ Orientation kGetOrientation(BuildContext context) {
 }
 
 /// show Snackbar
-void showASnackbar(BuildContext context, String message, [Color? color]) {
+void showASnackbar(BuildContext context, String message, [Color? color, int timeInSec=4]) {
   final snackbar = SnackBar(
     backgroundColor: color ?? kPrimaryColor,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kMediumRadius)),
     behavior: SnackBarBehavior.floating,
+    duration: Duration(seconds: timeInSec),
     showCloseIcon: true,
     content: Text(
       message,

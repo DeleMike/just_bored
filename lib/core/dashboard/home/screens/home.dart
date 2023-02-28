@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Love',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Love',
-                              onSelected: () async => await homeReader.selectMood('Love'),
+                              onSelected: () async => await homeReader.selectMood(context, 'Love'),
                             ),
                           ),
                           Expanded(
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Happy',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Happy',
-                              onSelected: () async  => await homeReader.selectMood('Happy'),
+                              onSelected: () async  => await homeReader.selectMood(context, 'Happy'),
                             ),
                           ),
                           Expanded(
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Sad',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Sad',
-                              onSelected: () async => await homeReader.selectMood('Sad'),
+                              onSelected: () async => await homeReader.selectMood(context, 'Sad'),
                             ),
                           ),
                           Expanded(
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Depress',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Depress',
-                              onSelected: () async => await homeReader.selectMood('Depress'),
+                              onSelected: () async => await homeReader.selectMood(context, 'Depress'),
                             ),
                           ),
                         ],

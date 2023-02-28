@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
-import 'package:just_bored/configs/constants.dart';
+import 'package:flutter/material.dart';
 
+import '../../../../network/http_client.dart' as client;
+import 'package:just_bored/configs/constants.dart';
 import '../../../../configs/debug_fns.dart';
 
 /// controls & manages home screen
@@ -75,7 +78,9 @@ class HomeController with ChangeNotifier {
   /// if the user selects an already selected mood, it clears away
   ///
   /// else it sets that selected mood as the current mood
-  Future<void> selectMood(String mood) async {
+  /// 
+  /// update the database with user current mood
+  Future<void> selectMood(BuildContext context, String mood) async {
     if (_selectedMood == mood) {
       _selectedMood = 'none';
     } else {
@@ -86,27 +91,37 @@ class HomeController with ChangeNotifier {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     printOut('UID = $uid', 'HomeController');
 
+    // get current user id
     if (uid == null) {
       showToast('User updating mood cannot be empty');
       return;
     }
 
     // get timestamp
-    //final timestamp = DateTime.now();
+    final timestamp = DateTime.now();
 
-    //final data = {'mood': mood, 'time': timestamp.toString()};
+    // data to send
+    final data = {
+      'mood': mood.toString().trim(),
+      'time': timestamp.toString(),
+    };
+    try {
+      final response = (await client.HttpClient.instance
+          .post(resource: 'mood_logs/$uid.json', data: jsonEncode(data)) as http.Response);
 
-    //await database.refFromURL('users/$uid').set(data);
-
-    // // perform firestore storage --aOnYZEX0fXgJD1QqLpmpe8rF6wH2
-    // final moodLog = FirebaseFirestore.instance.collection('mood_logs').doc(uid);
-
-    // // get timestamp
-    // final timestamp = DateTime.now();
-
-    // final data = {'mood': mood, 'time': timestamp};
-
-    // await moodLog.set(data).then((_) => showToast('Mood updated'));
+      if (response.statusCode != 200) {
+        showToast('Your mood could not be updated.\n You can try signing in again to update your mood.');
+      } else {
+        showToast(
+          'Whatever it is you are feeling, remember to breathe in and out.'
+          '\n You can look at the sun on your screen to help you breathe',
+          wantsLongText: true,
+        );
+      }
+    } catch (e, s) {
+      //FATAL: Something went wrong in the code (Frontend or Backend)
+      debugPrint('Error Message: $e, $s');
+    }
 
     notifyListeners();
   }
