@@ -49,6 +49,9 @@ dependencies:
   lottie: ^2.2.0
   cloud_firestore: ^4.4.3
   firebase_database: ^10.0.14
+  dio: ^5.0.1
+  http: ^0.13.5
+  velocity_x: ^3.6.0
 
 dev_dependencies:
   flutter_test:

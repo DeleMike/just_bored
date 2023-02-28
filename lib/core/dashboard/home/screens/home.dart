@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Love',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Love',
-                              onSelected: () async => await homeReader.selectMood('Love'),
+                              onSelected: () async => await homeReader.selectMood(context, 'Love'),
                             ),
                           ),
                           Expanded(
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Happy',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Happy',
-                              onSelected: () async  => await homeReader.selectMood('Happy'),
+                              onSelected: () async  => await homeReader.selectMood(context, 'Happy'),
                             ),
                           ),
                           Expanded(
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Sad',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Sad',
-                              onSelected: () async => await homeReader.selectMood('Sad'),
+                              onSelected: () async => await homeReader.selectMood(context, 'Sad'),
                             ),
                           ),
                           Expanded(
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               emojiName: 'Depress',
                               width: kScreenWidth(context) * 0.1,
                               selected: homeWatcher.selectedMood == 'Depress',
-                              onSelected: () async => await homeReader.selectMood('Depress'),
+                              onSelected: () async => await homeReader.selectMood(context, 'Depress'),
                             ),
                           ),
                         ],
@@ -270,6 +270,7 @@ class _ReflectionInput extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _userReflection = {};
   final HomeController controller;
+  final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +289,7 @@ class _ReflectionInput extends StatelessWidget {
                   minLines: 1,
                   maxLines: 3,
                   style: const TextStyle(fontSize: 12),
+                  controller: textEditingController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
                     labelText: 'Reflection today?',
@@ -331,7 +333,7 @@ class _ReflectionInput extends StatelessWidget {
               ),
               onPressed: () {
                 controller.setUserReflection(
-                    context: context, formKey: _formKey, userReflection: _userReflection);
+                    context: context, formKey: _formKey, userReflection: _userReflection, controller: textEditingController);
               },
               child: const Icon(
                 Icons.send_outlined,

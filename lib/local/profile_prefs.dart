@@ -11,6 +11,7 @@ class ProfilePrefs extends ChangeNotifier {
   ProfilePrefs();
 
   static const userProfileKey = 'userProfile';
+  static const reflectionTimeKey = 'reflectionTimeKey';
 
   final Map<String, dynamic> _userProfile = {
     'display_name': '',
@@ -19,6 +20,11 @@ class ProfilePrefs extends ChangeNotifier {
   };
 
   Map<String, dynamic> get userProfile => _userProfile;
+
+  String _reflectionTime = '';
+
+  /// last reflection time
+  String get reflectionTime => _reflectionTime;
 
   /// save user details
   Future<void> saveUser(User? user) async {
@@ -50,5 +56,22 @@ class ProfilePrefs extends ChangeNotifier {
 
     printOut(_userProfile.toString(), 'ProfilePrefs');
     //notifyListeners();
+  }
+
+  /// Save onboarding view status to `true`
+  ///  this is because the user has seen this screen one time and has no need to view it again
+  Future<void> saveLastReflectionTime(String time) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(reflectionTimeKey, time);
+  }
+
+  ///  get onboarding viewing status
+  Future<String> getLastReflectionTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    _reflectionTime =
+        prefs.getString(reflectionTimeKey) ?? ''; // return false if user has never viewed onboarding
+
+    printOut('reflectionTime = $_reflectionTime', 'Profile');
+    return _reflectionTime;
   }
 }

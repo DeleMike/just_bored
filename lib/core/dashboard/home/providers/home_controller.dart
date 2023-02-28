@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
-import 'package:just_bored/configs/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:just_bored/local/profile_prefs.dart';
 
+import '../../../../network/http_client.dart' as client;
+import 'package:just_bored/configs/constants.dart';
 import '../../../../configs/debug_fns.dart';
 
 /// controls & manages home screen
@@ -75,9 +79,11 @@ class HomeController with ChangeNotifier {
   /// if the user selects an already selected mood, it clears away
   ///
   /// else it sets that selected mood as the current mood
-  Future<void> selectMood(String mood) async {
+  ///
+  /// update the database with user current mood
+  Future<void> selectMood(BuildContext context, String mood) async {
     if (_selectedMood == mood) {
-      _selectedMood = 'none';
+      _selectedMood = 'normal';
     } else {
       _selectedMood = mood;
     }
@@ -86,42 +92,142 @@ class HomeController with ChangeNotifier {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     printOut('UID = $uid', 'HomeController');
 
+    // get current user id
     if (uid == null) {
       showToast('User updating mood cannot be empty');
       return;
     }
 
     // get timestamp
-    //final timestamp = DateTime.now();
+    final timestamp = DateTime.now();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    try {
+      // data to send
+      final data = {
+        'mood': _selectedMood.toString().trim(),
+        'time': timestamp.toString(),
+      };
+      final response = (await client.HttpClient.instance
+          .post(resource: 'mood_logs/$uid.json', data: jsonEncode(data)) as http.Response);
 
-    //final data = {'mood': mood, 'time': timestamp.toString()};
-
-    //await database.refFromURL('users/$uid').set(data);
-
-    // // perform firestore storage --aOnYZEX0fXgJD1QqLpmpe8rF6wH2
-    // final moodLog = FirebaseFirestore.instance.collection('mood_logs').doc(uid);
-
-    // // get timestamp
-    // final timestamp = DateTime.now();
-
-    // final data = {'mood': mood, 'time': timestamp};
-
-    // await moodLog.set(data).then((_) => showToast('Mood updated'));
-
+      if (response.statusCode != 200) {
+        showToast('Your mood could not be updated.\n You can try signing in again to update your mood.');
+      } else {
+        showToast(
+          'Whatever it is you are feeling, remember to breathe in and out.'
+          '\n You can look at the sun on your screen to help you breathe',
+          wantsLongText: true,
+          wantsCenterMsg: true,
+        );
+      }
+    } catch (e, s) {
+      //FATAL: Something went wrong in the code (Frontend or Backend)
+      debugPrint('Error Message: $e, $s');
+    }
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
     notifyListeners();
   }
 
   /// sets user reflection
   /// This will be allowed only twice a day, morning hours at 10am and evening hours at 8pm
-  void setUserReflection({
+  Future<void> setUserReflection({
     required BuildContext context,
     required GlobalKey<FormState> formKey,
     required Map<String, String> userReflection,
-  }) {
+    required TextEditingController controller,
+  }) async {
+    // save time to local storage
     final isValid = formKey.currentState!.validate();
     if (isValid) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+
       formKey.currentState!.save();
       printOut(userReflection, 'Reflection');
+
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
+      printOut('UID = $uid', 'HomeController');
+
+      // get current user id
+      if (uid == null) {
+        showToast('User updating mood cannot be empty');
+        return;
+      }
+
+      // get timestamp
+      final timestamp = DateTime.now();
+      final lastTimestamp = await ProfilePrefs().getLastReflectionTime();
+      DateTime? lastTimeConverted;
+      // parse the time
+      if (lastTimestamp.isNotEmpty) {
+        lastTimeConverted = DateTime.parse(lastTimestamp);
+        printOut(lastTimeConverted.toString(), 'HomeController');
+      }
+
+      if (lastTimestamp.isEmpty) {
+        // update asap
+        await _updateFirebaseData(userReflection, timestamp, uid, controller);
+      } else if (!(timestamp.isAfter(lastTimeConverted!.add(const Duration(hours: 8))))) {
+        // check for our constraint
+        // if time is not empty and last timestamp is not after 1 mins, deny update access
+        // ignore: use_build_context_synchronously
+        showToast(
+          // context,
+          'Please come back later to add a new reflection.'
+          '\n You can only update your reflection after every 8 hours',
+          wantsCenterMsg: true,
+          wantsLongText: true,
+        );
+      } else {
+        await _updateFirebaseData(userReflection, timestamp, uid, controller);
+      }
+      navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      notifyListeners();
+    }
+  }
+
+  /// update the firebase database
+  Future<void> _updateFirebaseData(
+      Map<String, String> data, DateTime timestamp, String uid, TextEditingController controller) async {
+    // get user reflection
+    final reflection = data['reflection'];
+
+    try {
+      // data to send
+      final data = {
+        'reflection': reflection.toString().trim(),
+        'time': timestamp.toString(),
+      };
+      printOut('Data = $data', 'HomeController');
+      await ProfilePrefs().saveLastReflectionTime(timestamp.toString());
+
+      final response = (await client.HttpClient.instance
+          .post(resource: 'reflections/$uid.json', data: jsonEncode(data)) as http.Response);
+
+      if (response.statusCode != 200) {
+        showToast('Your reflection could not be saved.\n You can try signing in again to add a reflection.');
+      } else {
+        showToast(
+          'Great!\nSelf-reflection definitely helps you grow',
+          wantsLongText: true,
+          wantsCenterMsg: true,
+        );
+        controller.text = '';
+      }
+    } catch (e, s) {
+      //FATAL: Something went wrong in the code (Frontend or Backend)
+      debugPrint('Error Message: $e, $s');
     }
   }
 

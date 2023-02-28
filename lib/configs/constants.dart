@@ -68,11 +68,12 @@ Orientation kGetOrientation(BuildContext context) {
 }
 
 /// show Snackbar
-void showASnackbar(BuildContext context, String message, [Color? color]) {
+void showASnackbar(BuildContext context, String message, {Color? color, int timeInSec = 4}) {
   final snackbar = SnackBar(
     backgroundColor: color ?? kPrimaryColor,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kMediumRadius)),
     behavior: SnackBarBehavior.floating,
+    duration: Duration(seconds: timeInSec),
     showCloseIcon: true,
     content: Text(
       message,
@@ -86,11 +87,11 @@ void showASnackbar(BuildContext context, String message, [Color? color]) {
 }
 
 /// Show toast with [message]
-void showToast(String message, {wantsLongText = false}) {
+void showToast(String message, {wantsLongText = false, wantsCenterMsg = false}) {
   Fluttertoast.showToast(
       msg: message,
       toastLength: wantsLongText ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
+      gravity: wantsCenterMsg ? ToastGravity.CENTER : ToastGravity.BOTTOM ,
       timeInSecForIosWeb: 1,
       backgroundColor: kPrimaryColor,
       textColor: kWhite,
