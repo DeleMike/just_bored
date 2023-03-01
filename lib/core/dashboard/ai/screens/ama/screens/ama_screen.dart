@@ -64,9 +64,10 @@ class _AmaScreenState extends State<AmaScreen> {
                 child: _ChatSpace(controller: amaWatcher),
               ),
             ),
+            if (amaWatcher.isLoading) const Center(child: CircularProgressIndicator()),
             Padding(
               padding: const EdgeInsets.all(kPaddingS),
-              child: _ChatInput(controller: amaReader, openAI:openAI),
+              child: _ChatInput(controller: amaReader, openAI: openAI),
             ),
           ],
         ),

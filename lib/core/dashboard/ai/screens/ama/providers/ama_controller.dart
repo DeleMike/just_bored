@@ -22,6 +22,9 @@ class AmaController with ChangeNotifier {
 
   List<Ama> get chats => _chats;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   /// this will send the message to the ChatGPT model and get a response for the user
   Future<void> sendMessage({
     required BuildContext context,
@@ -32,34 +35,38 @@ class AmaController with ChangeNotifier {
   }) async {
     final isValid = formKey.currentState!.validate();
     if (isValid) {
+      _isLoading = true;
+      notifyListeners();
+
       formKey.currentState!.save();
       final message = messageData['message'];
       printOut(message, 'AmaController');
       printOut('OpenAI Instance = $openAiInstance', 'AmaController');
+      String? uid = ProfilePrefs().getUserId();
+
+      chats.add(Ama.fromjson({
+        'id': uid,
+        'message': message,
+        'is_user': true,
+      }));
 
       // reply the user based from their message
-     // String reply = await _sendReply(message!, openAiInstance);
-      _sendReply('', openAiInstance);
+      String reply = await _sendReply(message!, openAiInstance);
+      // _sendReply('', openAiInstance);
 
-      // String? uid = ProfilePrefs().getUserId();
+      // add to chats array
+      chats.add(
+        Ama.fromjson({
+          'id': 'just-bored-ai',
+          'message': reply,
+          'is_user': false,
+        }),
+      );
 
-      // // add to chats array
-      // chats.addAll([
-      //   Ama.fromjson({
-      //     'id': uid,
-      //     'message': message,
-      //     'is_user': true,
-      //   }),
-      //   Ama.fromjson({
-      //     'id': 'just-bored-ai',
-      //     'message': 'I am not implemented yet.\nWith time we should be communicating soon! 😉',
-      //     'is_user': false,
-      //   }),
-      // ]);
-
-      // controller.text = '';
-      notifyListeners();
+      controller.text = '';
+      _isLoading = false;
     }
+    notifyListeners();
   }
 
   // ignore: unused_element
@@ -108,19 +115,21 @@ class AmaController with ChangeNotifier {
   }
 
   /// reply user based on message sent
-  void _sendReply(String userMsg, OpenAI? openAI) async {
+  Future<String> _sendReply(String userMsg, OpenAI? openAI) async {
     final request = CompleteText(
-      prompt: 'What is human life expectancy in the United States?',
+      prompt: userMsg,
       model: kTranslateModelV3,
       maxTokens: 2000,
     );
 
-    // await openAI.onCompleteText(request: request);
-
-    openAI!.onCompleteStream(request: request).listen((response) => printOut(response)).onError((err) {
-      printOut("$err");
+    final res = await openAI!.onCompleteText(request: request).onError((error, stackTrace) {
+      printOut('Error: $error, $stackTrace');
+      _isLoading = false;
+      notifyListeners();
+      return null;
     });
-    //return '';
+    String text = res!.choices.last.text.trim();
+    return text;
   }
 
   // reset variables state
@@ -129,5 +138,6 @@ class AmaController with ChangeNotifier {
       Ama(id: '1', message: 'Hello', isUser: true),
       Ama(id: '2', message: 'Hi there! How may I help you today?', isUser: false),
     ];
+    _isLoading = false;
   }
 }
