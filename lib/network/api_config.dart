@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import '../configs/debug_fns.dart';
 
 /// Configuration Service for Dio
 class ApiConfigService {
@@ -20,9 +20,8 @@ class ApiConfigService {
 
   /// Set Headers
   Map<String, dynamic> setHeaders() {
-    Map<String, dynamic> header = {
-    };
-    debugPrint("user-header $header");
+    Map<String, dynamic> header = {};
+    printOut("user-header $header");
     return header;
   }
 }

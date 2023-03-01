@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../configs/debug_fns.dart';
 import 'api_config.dart';
 
 /// Create a client connection
@@ -37,10 +38,10 @@ class HttpClient {
   }
 
   void _printTokenGetReq(http.Response response) {
-    debugPrint('HttpClient: Response status = ${response.statusCode}');
-    debugPrint('HttpClient: Request Headers = ${response.request!.headers}');
-    debugPrint('HttpClient: Real url= ${response.request!.url}');
-    debugPrint('HttpClient: Data = ${response.body}');
+    printOut('HttpClient: Response status = ${response.statusCode}');
+    printOut('HttpClient: Request Headers = ${response.request!.headers}');
+    printOut('HttpClient: Real url= ${response.request!.url}');
+    printOut('HttpClient: Data = ${response.body}');
   }
 
   /// post resource data with token
@@ -104,9 +105,9 @@ class HttpClient {
 
   // print data
   void _printOut(dynamic object) {
-    debugPrint('HttpClient: Response status = ${object.statusCode}');
-    debugPrint('HttpClient: Response Message = ${object.statusMessage}');
-    debugPrint('HttpClient: Real url= ${object.realUri}');
-    debugPrint('HttpClient: Data = ${object.data}');
+    printOut('HttpClient: Response status = ${object.statusCode}');
+    printOut('HttpClient: Response Message = ${object.statusMessage}');
+    printOut('HttpClient: Real url= ${object.realUri}');
+    printOut('HttpClient: Data = ${object.data}');
   }
 }

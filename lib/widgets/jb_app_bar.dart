@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:just_bored/core/dashboard/home/providers/home_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../configs/constants.dart';
+import '../configs/debug_fns.dart';
+import '../core/dashboard/home/providers/home_controller.dart';
 import '../core/auth/providers/auth_controller.dart';
+
 import 'logout_dialog.dart';
 
 /// General app bar
@@ -59,7 +61,7 @@ class JBAppbar extends StatelessWidget implements PreferredSizeWidget {
                   tooltip: 'Logout',
                   onPressed: () async {
                     final wantsToLogout = await logoutDialog(context);
-                    debugPrint('Wants To Logout: $wantsToLogout');
+                    printOut('Wants To Logout: $wantsToLogout');
                     if (wantsToLogout) {
                       // clean resources
                         // ignore: use_build_context_synchronously

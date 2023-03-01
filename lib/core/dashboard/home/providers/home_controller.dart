@@ -128,7 +128,7 @@ class HomeController with ChangeNotifier {
       }
     } catch (e, s) {
       //FATAL: Something went wrong in the code (Frontend or Backend)
-      debugPrint('Error Message: $e, $s');
+      printOut('Error Message: $e, $s');
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
     notifyListeners();
@@ -227,7 +227,7 @@ class HomeController with ChangeNotifier {
       }
     } catch (e, s) {
       //FATAL: Something went wrong in the code (Frontend or Backend)
-      debugPrint('Error Message: $e, $s');
+      printOut('Error Message: $e, $s');
     }
   }
 
