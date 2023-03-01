@@ -74,4 +74,9 @@ class ProfilePrefs extends ChangeNotifier {
     printOut('reflectionTime = $_reflectionTime', 'Profile');
     return _reflectionTime;
   }
+
+  String getUserId() {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    return userId;
+  }
 }
