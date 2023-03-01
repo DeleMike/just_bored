@@ -55,6 +55,7 @@ dependencies:
   chat_gpt_sdk: ^2.0.0
   grouped_list: ^5.1.2
   bubble: ^1.2.1
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +81,7 @@ flutter:
 
  
   assets:
+    - .env
     - assets/images/
     - assets/images/onboarding/
     - assets/images/emojis/

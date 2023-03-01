@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:bubble/bubble.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -19,6 +22,20 @@ class AmaScreen extends StatefulWidget {
 }
 
 class _AmaScreenState extends State<AmaScreen> {
+  OpenAI? openAI;
+  StreamSubscription? streamSubscription;
+
+  _init() async {
+    openAI = context.read<AmaController>().initAIEngine();
+    printOut('OpenAI Object = $openAI', 'AmaScreen');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
   @override
   Widget build(BuildContext context) {
     final amaReader = context.read<AmaController>();
@@ -49,7 +66,7 @@ class _AmaScreenState extends State<AmaScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(kPaddingS),
-              child: _ChatInput(controller: amaReader),
+              child: _ChatInput(controller: amaReader, openAI:openAI),
             ),
           ],
         ),
@@ -97,11 +114,12 @@ class _ChatSpace extends StatelessWidget {
 /// Displays component where users can send their questions
 class _ChatInput extends StatelessWidget {
   /// Displays component where users can send their questions
-  _ChatInput({required this.controller});
+  _ChatInput({required this.controller, required this.openAI});
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _userMessage = {};
   final TextEditingController textEditingController = TextEditingController();
   final AmaController controller;
+  final OpenAI? openAI;
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +186,7 @@ class _ChatInput extends StatelessWidget {
                   formKey: _formKey,
                   messageData: _userMessage,
                   controller: textEditingController,
+                  openAiInstance: openAI,
                 );
               },
               child: const Icon(
