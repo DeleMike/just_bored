@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:bubble/bubble.dart';
@@ -23,17 +21,25 @@ class AmaScreen extends StatefulWidget {
 
 class _AmaScreenState extends State<AmaScreen> {
   OpenAI? openAI;
-  StreamSubscription? streamSubscription;
 
   _init() async {
     openAI = context.read<AmaController>().initAIEngine();
     printOut('OpenAI Object = $openAI', 'AmaScreen');
+    context.read<AmaController>().initChat(openAI);
   }
 
   @override
   void initState() {
     super.initState();
     _init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (openAI != null) {
+      openAI!.close();
+    }
   }
 
   @override
@@ -44,6 +50,7 @@ class _AmaScreenState extends State<AmaScreen> {
       appBar: JBAppbar(
         headerText: 'Just Bored',
         needsABackButton: true,
+        needsLogoutButton: false,
         handleBackButtonPress: () {
           amaReader.reset();
           Navigator.of(context).pop();

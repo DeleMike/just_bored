@@ -15,10 +15,7 @@ class AmaController with ChangeNotifier {
   AmaController();
 
   // user chats
-  List<Ama> _chats = [
-    Ama(id: '1', message: 'Hello', isUser: true),
-    Ama(id: '2', message: 'Hi there! How may I help you today?', isUser: false),
-  ];
+  List<Ama> _chats = [];
 
   List<Ama> get chats => _chats;
 
@@ -114,16 +111,43 @@ class AmaController with ChangeNotifier {
     return openAI;
   }
 
+  /// initialise a chat
+  Future<void> initChat(OpenAI? openAI) async {
+    String msg = 'Hi, I wanna talk with you?';
+    String? uid = ProfilePrefs().getUserId();
+
+      chats.add(Ama.fromjson({
+        'id': uid,
+        'message': msg,
+        'is_user': true,
+      }));
+    _isLoading = true;
+
+    String reply = await _sendReply(msg, openAI);
+
+    // add to chats array
+    chats.add(
+      Ama.fromjson({
+        'id': 'just-bored-ai',
+        'message': reply,
+        'is_user': false,
+      }),
+    );
+    _isLoading = false;
+    notifyListeners();
+  }
+
   /// reply user based on message sent
   Future<String> _sendReply(String userMsg, OpenAI? openAI) async {
     final request = CompleteText(
       prompt: userMsg,
       model: kTranslateModelV3,
-      maxTokens: 2000,
+      maxTokens: 100,
     );
 
     final res = await openAI!.onCompleteText(request: request).onError((error, stackTrace) {
       printOut('Error: $error, $stackTrace');
+      showToast('Process failed. Try again');
       _isLoading = false;
       notifyListeners();
       return null;
@@ -134,10 +158,7 @@ class AmaController with ChangeNotifier {
 
   // reset variables state
   void reset() {
-    _chats = [
-      Ama(id: '1', message: 'Hello', isUser: true),
-      Ama(id: '2', message: 'Hi there! How may I help you today?', isUser: false),
-    ];
+    _chats = [];
     _isLoading = false;
   }
 }
