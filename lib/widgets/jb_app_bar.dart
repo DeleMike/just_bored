@@ -16,6 +16,7 @@ class JBAppbar extends StatelessWidget implements PreferredSizeWidget {
   final void Function()? handleBackButtonPress;
   final Color? color;
   final Color? iconColor;
+  final bool needsLogoutButton;
 
   /// General app bar
   const JBAppbar({
@@ -26,6 +27,7 @@ class JBAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.handleBackButtonPress,
     this.color,
     this.iconColor,
+    this.needsLogoutButton = true,
   }) : super(key: key);
 
   @override
@@ -57,24 +59,25 @@ class JBAppbar extends StatelessWidget implements PreferredSizeWidget {
         actions: (actionCameFromAppBar != null && actionCameFromAppBar!)
             ? null
             : [
-                IconButton(
-                  tooltip: 'Logout',
-                  onPressed: () async {
-                    final wantsToLogout = await logoutDialog(context);
-                    printOut('Wants To Logout: $wantsToLogout');
-                    if (wantsToLogout) {
-                      // clean resources
+                if (needsLogoutButton)
+                  IconButton(
+                    tooltip: 'Logout',
+                    onPressed: () async {
+                      final wantsToLogout = await logoutDialog(context);
+                      printOut('Wants To Logout: $wantsToLogout');
+                      if (wantsToLogout) {
+                        // clean resources
                         // ignore: use_build_context_synchronously
-                      context.read<HomeController>().reset();
-                      // ignore: use_build_context_synchronously
-                      await context.read<AuthController>().logout(context);
-                    }
-                  },
-                  icon: Icon(
-                    Icons.logout_outlined,
-                    color: iconColor ?? kDefaultIconDarkColor,
+                        context.read<HomeController>().reset();
+                        // ignore: use_build_context_synchronously
+                        await context.read<AuthController>().logout(context);
+                      }
+                    },
+                    icon: Icon(
+                      Icons.logout_outlined,
+                      color: iconColor ?? kDefaultIconDarkColor,
+                    ),
                   ),
-                ),
               ],
       ),
     );
