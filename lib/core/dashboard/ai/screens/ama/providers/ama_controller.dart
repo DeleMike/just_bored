@@ -17,9 +17,12 @@ class AmaController with ChangeNotifier {
   // user chats
   List<Ama> _chats = [];
 
+  /// user chats
   List<Ama> get chats => _chats;
 
   bool _isLoading = false;
+
+  /// show if the model is processing data
   bool get isLoading => _isLoading;
 
   /// this will send the message to the ChatGPT model and get a response for the user

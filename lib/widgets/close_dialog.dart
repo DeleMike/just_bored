@@ -14,7 +14,7 @@ Future<bool> closeDialog(BuildContext context) async {
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
           ),
           content: Text(
-            'Remember, closing this page will clear all your chats.',
+            'Remember, closing this page will clear this session data.',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500),
           ),
           actions: [
