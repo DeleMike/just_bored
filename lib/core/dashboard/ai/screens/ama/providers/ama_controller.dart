@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dart_openai/openai.dart';
-import 'package:just_bored/configs/constants.dart';
 
 import '../../../../../../local/profile_prefs.dart';
 import '../../../../../../configs/debug_fns.dart';
