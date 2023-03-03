@@ -24,20 +24,14 @@ class _ImageryScreenState extends State<ImageryScreen> {
   OpenAI? openAI;
 
   _init() async {
-    // openAI = context.read<AmaController>().initAIEngine();
-    // printOut('OpenAI Object = $openAI', 'AmaScreen');
-    // context.read<AmaController>().initChat(openAI);
+    openAI = context.read<ImageryController>().initAIEngine();
+    printOut('OpenAI Object = $openAI', 'AmaScreen');
   }
 
   @override
   void initState() {
     super.initState();
     _init();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -137,10 +131,8 @@ class _ImageGenSpace extends StatelessWidget {
                       ),
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          minHeight: kScreenHeight(context) * 0.1,
-                          minWidth: kScreenWidth(context)
-                        ),
-                        child:  Image.network(
+                            minHeight: kScreenHeight(context) * 0.1, minWidth: kScreenWidth(context)),
+                        child: Image.network(
                           imagery.imageUrl,
                           fit: BoxFit.contain,
                           errorBuilder: ((context, error, stackTrace) {

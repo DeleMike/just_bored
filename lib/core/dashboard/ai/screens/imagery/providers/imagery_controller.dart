@@ -1,11 +1,9 @@
-import 'package:dart_openai/src/instance/openai.dart';
+import 'package:dart_openai/openai.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/form.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
-import 'package:just_bored/configs/constants.dart';
-import 'package:just_bored/configs/debug_fns.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../../../../../configs/debug_fns.dart';
 import '../../../../../../local/profile_prefs.dart';
 import '../models/imagery.dart';
 
@@ -51,13 +49,14 @@ class ImageryController with ChangeNotifier {
       }));
 
       // reply the user based from their message
-      await Future.delayed(const Duration(seconds: 2));
-      // String reply = await _sendReply(message!, openAiInstance);
+      // await Future.delayed(const Duration(seconds: 2));
+      String? generatedImageUrl  = await _getImageUrlResponse(prompt!, openAiInstance);
 
+      //kNetworkImage
       _promptsAndImages.add(Imagery.fromjson({
         'id': uid,
         'prompt': '',
-        'image_url': kNetworkImage,
+        'image_url': generatedImageUrl,
         'is_user': false,
       }));
 
@@ -65,6 +64,34 @@ class ImageryController with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  /// initialise AI engine for task
+  OpenAI? initAIEngine() {
+    OpenAI? openAI;
+
+    // init the API key
+    final apiKey = dotenv.env['OPENAI_API_KEY'];
+    OpenAI.apiKey = apiKey!;
+    if (kDebugMode) {
+      OpenAI.showLogs = true;
+    }
+    openAI = OpenAI.instance;
+
+    return openAI;
+  }
+
+  /// reply user based on message sent
+  Future<String> _getImageUrlResponse(String prompt, OpenAI? openAI) async {
+    final OpenAIImageModel image = await OpenAI.instance.image.create(
+      prompt: prompt,
+      n: 1,
+      size: OpenAIImageSize.size1024,
+      responseFormat: OpenAIResponseFormat.url,
+    );
+
+    String url = image.data.last.url;
+    return url;
   }
 
   // reset variables state
