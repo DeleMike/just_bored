@@ -5,8 +5,13 @@ class Ama {
   /// AMA data model
   Ama({required this.id, required this.message, required this.isUser});
 
+    /// id of the user currently using the application
   final String id;
+
+  /// message to use in conversation
   final String message;
+
+  /// is this the user or AI
   final bool isUser;
 
   /// change to [Ama] data model
@@ -32,7 +37,7 @@ class Ama {
     return jsonEncode({
       'id': id,
       'message': message,
-       'is_user': isUser,
+      'is_user': isUser,
     });
   }
 }
