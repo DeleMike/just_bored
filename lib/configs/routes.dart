@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_bored/core/auth/screens/auth_screen.dart';
 import 'package:just_bored/core/dashboard/ai/screens/ama/screens/ama_screen.dart';
+import 'package:just_bored/core/dashboard/ai/screens/imagery/screens/imagery_screen.dart';
 
 import '../core/onboarding/onboarding.dart';
 
@@ -25,13 +26,14 @@ class Routes {
   static const jokes = '/jokes';
 
   /// ai views routes
-  static const aiViews = '/aiviews';
+  static const imagery = '/imagery';
 
   Map<String, Widget Function(BuildContext)> generateRoutes(BuildContext context) {
     return {
       onboarding: (ctx) => const OnboardingScreen(),
       auth: (ctx) => const AuthScreen(),
       ama: (ctx) => const AmaScreen(),
+      imagery: (ctx) => const ImageryScreen(),
     };
   }
 }

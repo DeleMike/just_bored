@@ -44,7 +44,7 @@ class AmaController with ChangeNotifier {
       // printOut('OpenAI Instance = $openAiInstance', 'AmaController');
       String? uid = ProfilePrefs().getUserId();
 
-      chats.add(Ama.fromjson({
+      _chats.add(Ama.fromjson({
         'id': uid,
         'message': message,
         'is_user': true,
@@ -54,7 +54,7 @@ class AmaController with ChangeNotifier {
       String reply = await _sendReply(message!, openAiInstance);
 
       // add to chats array
-      chats.add(
+      _chats.add(
         Ama.fromjson({
           'id': 'just-bored-ai',
           'message': reply,

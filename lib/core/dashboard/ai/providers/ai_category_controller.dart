@@ -31,6 +31,7 @@ class AICategoryController with ChangeNotifier {
         break;
       case 4:
         printOut('Image gen', 'AICategoryController');
+        Navigator.of(context).pushNamed(Routes.imagery);
         break;
       default:
     }

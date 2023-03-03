@@ -16,6 +16,7 @@ import '../local/onboarding_prefs.dart';
 import '../configs/app_theme.dart';
 import '../configs/constants.dart';
 
+import 'dashboard/ai/screens/imagery/providers/imagery_controller.dart';
 import 'dashboard/nav_screen.dart';
 import 'onboarding/onboarding.dart';
 
@@ -53,6 +54,9 @@ class JustBored extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => AmaController(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => ImageryController(),
         ),
       ],
       child: MaterialApp(
