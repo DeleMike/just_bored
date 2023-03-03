@@ -1,6 +1,5 @@
-import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
-import 'package:dart_openai/openai.dart' as ai;
+import 'package:dart_openai/openai.dart';
 import 'package:bubble/bubble.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:just_bored/core/dashboard/ai/screens/ama/models/ama.dart';
@@ -21,19 +20,13 @@ class AmaScreen extends StatefulWidget {
 }
 
 class _AmaScreenState extends State<AmaScreen> {
-  ai.OpenAI? openAI;
-
-  // _init() async {
-  //   openAI = context.read<AmaController>().initAIEngine();
-  //   printOut('OpenAI Object = $openAI', 'AmaScreen');
-  //   context.read<AmaController>().initChat(openAI);
-  // }
+  OpenAI? openAI;
 
   _init() async {
-    openAI = context.read<AmaController>().initAI();
+    openAI = context.read<AmaController>().initAIEngine();
     printOut('OpenAI Object = $openAI', 'AmaScreen');
+    context.read<AmaController>().initChat(openAI);
   }
-
   @override
   void initState() {
     super.initState();
@@ -43,9 +36,6 @@ class _AmaScreenState extends State<AmaScreen> {
   @override
   void dispose() {
     super.dispose();
-    // if (openAI != null) {
-    //   openAI!.close();
-    // }
   }
 
   @override
@@ -139,7 +129,7 @@ class _ChatInput extends StatelessWidget {
   final Map<String, String> _userMessage = {};
   final TextEditingController textEditingController = TextEditingController();
   final AmaController controller;
-  final ai.OpenAI? openAI;
+  final OpenAI? openAI;
 
   @override
   Widget build(BuildContext context) {
