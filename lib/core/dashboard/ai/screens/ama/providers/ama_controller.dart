@@ -64,8 +64,8 @@ class AmaController with ChangeNotifier {
 
       controller.text = '';
       _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   /// initialise AI engine for task
