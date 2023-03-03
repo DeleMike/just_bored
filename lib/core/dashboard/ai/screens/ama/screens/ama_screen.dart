@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:dart_openai/openai.dart';
 import 'package:bubble/bubble.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:just_bored/core/dashboard/ai/screens/ama/models/ama.dart';
-import 'package:just_bored/core/dashboard/ai/screens/ama/providers/ama_controller.dart';
 import 'package:provider/provider.dart';
 
+import '../models/ama.dart';
+import '../providers/ama_controller.dart';
+
 import '../../../../../../configs/constants.dart';
+import '../../../../../../widgets/close_dialog.dart';
 import '../../../../../../configs/debug_fns.dart';
 import '../../../../../../widgets/jb_app_bar.dart';
 
@@ -27,6 +29,7 @@ class _AmaScreenState extends State<AmaScreen> {
     printOut('OpenAI Object = $openAI', 'AmaScreen');
     context.read<AmaController>().initChat(openAI);
   }
+
   @override
   void initState() {
     super.initState();
@@ -47,9 +50,16 @@ class _AmaScreenState extends State<AmaScreen> {
         headerText: 'Just Bored',
         needsABackButton: true,
         needsLogoutButton: false,
-        handleBackButtonPress: () {
-          amaReader.reset();
-          Navigator.of(context).pop();
+        handleBackButtonPress: () async {
+          final wantsToLeave = await closeDialog(context);
+          if (wantsToLeave) {
+            amaReader.reset();
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            } else {
+              return;
+            }
+          }
         },
         color: kPrimaryColor,
         iconColor: kWhite,

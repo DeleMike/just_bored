@@ -53,7 +53,7 @@ class _AIHomeScreenState extends State<AIHomeScreen> {
                 },
               ),
               _Category(
-                name: 'Image Gen',
+                name: 'Imagery',
                 imagePath: AssetsImages.shareViews,
                 onPressed: () {
                   aiControllerReader.controlSelectedAICategory(context, categoryCode: 4);
