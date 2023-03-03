@@ -34,7 +34,7 @@ class _AIHomeScreenState extends State<AIHomeScreen> {
                   name: 'Ask me anything',
                   imagePath: AssetsImages.manChatting,
                   onPressed: () {
-                    aiControllerReader.controlSelectedAICategory(categoryCode: 1);
+                    aiControllerReader.controlSelectedAICategory(context, categoryCode: 1);
                   },
                 ),
               ),
@@ -42,21 +42,21 @@ class _AIHomeScreenState extends State<AIHomeScreen> {
                 name: 'Did you know?',
                 imagePath: AssetsImages.womanHearingFacts,
                 onPressed: () {
-                  aiControllerReader.controlSelectedAICategory(categoryCode: 2);
+                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 2);
                 },
               ),
               _Category(
                 name: 'Jokes & Riddles',
                 imagePath: AssetsImages.babyLaughing,
                 onPressed: () {
-                  aiControllerReader.controlSelectedAICategory(categoryCode: 3);
+                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 3);
                 },
               ),
               _Category(
-                name: 'AI Views',
+                name: 'Imagery',
                 imagePath: AssetsImages.shareViews,
                 onPressed: () {
-                  aiControllerReader.controlSelectedAICategory(categoryCode: 4);
+                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 4);
                 },
               ),
             ],

@@ -52,6 +52,10 @@ dependencies:
   dio: ^5.0.1
   http: ^0.13.5
   velocity_x: ^3.6.0
+  grouped_list: ^5.1.2
+  bubble: ^1.2.1
+  flutter_dotenv: ^5.0.2
+  dart_openai: ^1.5.5
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +81,7 @@ flutter:
 
  
   assets:
+    - .env
     - assets/images/
     - assets/images/onboarding/
     - assets/images/emojis/
