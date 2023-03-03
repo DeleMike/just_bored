@@ -1,5 +1,6 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:dart_openai/openai.dart' as ai;
 import 'package:bubble/bubble.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:just_bored/core/dashboard/ai/screens/ama/models/ama.dart';
@@ -20,12 +21,17 @@ class AmaScreen extends StatefulWidget {
 }
 
 class _AmaScreenState extends State<AmaScreen> {
-  OpenAI? openAI;
+  ai.OpenAI? openAI;
+
+  // _init() async {
+  //   openAI = context.read<AmaController>().initAIEngine();
+  //   printOut('OpenAI Object = $openAI', 'AmaScreen');
+  //   context.read<AmaController>().initChat(openAI);
+  // }
 
   _init() async {
-    openAI = context.read<AmaController>().initAIEngine();
+    openAI = context.read<AmaController>().initAI();
     printOut('OpenAI Object = $openAI', 'AmaScreen');
-    context.read<AmaController>().initChat(openAI);
   }
 
   @override
@@ -37,9 +43,9 @@ class _AmaScreenState extends State<AmaScreen> {
   @override
   void dispose() {
     super.dispose();
-    if (openAI != null) {
-      openAI!.close();
-    }
+    // if (openAI != null) {
+    //   openAI!.close();
+    // }
   }
 
   @override
@@ -74,7 +80,10 @@ class _AmaScreenState extends State<AmaScreen> {
             if (amaWatcher.isLoading) const Center(child: CircularProgressIndicator()),
             Padding(
               padding: const EdgeInsets.all(kPaddingS),
-              child: _ChatInput(controller: amaReader, openAI: openAI),
+              child: _ChatInput(
+                controller: amaReader,
+                openAI: openAI,
+              ),
             ),
           ],
         ),
@@ -122,12 +131,15 @@ class _ChatSpace extends StatelessWidget {
 /// Displays component where users can send their questions
 class _ChatInput extends StatelessWidget {
   /// Displays component where users can send their questions
-  _ChatInput({required this.controller, required this.openAI});
+  _ChatInput({
+    required this.controller,
+    required this.openAI,
+  });
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _userMessage = {};
   final TextEditingController textEditingController = TextEditingController();
   final AmaController controller;
-  final OpenAI? openAI;
+  final ai.OpenAI? openAI;
 
   @override
   Widget build(BuildContext context) {

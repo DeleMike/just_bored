@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dart_openai/openai.dart' as ai;
 import 'package:just_bored/configs/constants.dart';
 
 import '../../../../../../local/profile_prefs.dart';
@@ -28,7 +29,7 @@ class AmaController with ChangeNotifier {
     required GlobalKey<FormState> formKey,
     required Map<String, String> messageData,
     required TextEditingController controller,
-    required OpenAI? openAiInstance,
+    required ai.OpenAI? openAiInstance,
   }) async {
     final isValid = formKey.currentState!.validate();
     if (isValid) {
@@ -38,7 +39,7 @@ class AmaController with ChangeNotifier {
       formKey.currentState!.save();
       final message = messageData['message'];
       printOut(message, 'AmaController');
-      printOut('OpenAI Instance = $openAiInstance', 'AmaController');
+      // printOut('OpenAI Instance = $openAiInstance', 'AmaController');
       String? uid = ProfilePrefs().getUserId();
 
       chats.add(Ama.fromjson({
@@ -48,8 +49,10 @@ class AmaController with ChangeNotifier {
       }));
 
       // reply the user based from their message
-      String reply = await _sendReply(message!, openAiInstance);
+      //String reply = await _sendReply(message!, openAiInstance);
       // _sendReply('', openAiInstance);
+
+      String reply = await _chatMe(openAiInstance, message!);
 
       // add to chats array
       chats.add(
@@ -89,6 +92,30 @@ class AmaController with ChangeNotifier {
     }
   }
 
+  /// try dart_openai
+  ai.OpenAI? initAI() {
+    ai.OpenAI? openAI;
+
+    // init the API key
+    final apiKey = dotenv.env['OPENAI_API_KEY'];
+    ai.OpenAI.apiKey = apiKey!;
+
+    openAI = ai.OpenAI.instance;
+
+    return openAI;
+  }
+
+  Future<String> _chatMe(ai.OpenAI? openAI, String message) async {
+    final ai.OpenAIChatCompletionModel chatCompletion = await openAI!.chat.create(
+      model: "gpt-3.5-turbo",
+      messages: [
+        ai.OpenAIChatCompletionChoiceMessageModel(content: message, role: "user"),
+      ],
+    );
+
+    return chatCompletion.choices.last.message.content.trim();
+  }
+
   /// initialise AI engine for task
   OpenAI? initAIEngine() {
     OpenAI? openAI;
@@ -116,11 +143,11 @@ class AmaController with ChangeNotifier {
     String msg = 'Hi, I wanna talk with you?';
     String? uid = ProfilePrefs().getUserId();
 
-      chats.add(Ama.fromjson({
-        'id': uid,
-        'message': msg,
-        'is_user': true,
-      }));
+    chats.add(Ama.fromjson({
+      'id': uid,
+      'message': msg,
+      'is_user': true,
+    }));
     _isLoading = true;
 
     String reply = await _sendReply(msg, openAI);
