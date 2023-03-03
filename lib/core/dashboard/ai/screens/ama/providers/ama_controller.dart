@@ -65,7 +65,7 @@ class AmaController with ChangeNotifier {
     }
     notifyListeners();
   }
-  
+
   /// initialise AI engine for task
   OpenAI? initAIEngine() {
     OpenAI? openAI;
@@ -111,7 +111,7 @@ class AmaController with ChangeNotifier {
   Future<String> _sendReply(String userMsg, OpenAI? openAI) async {
     final OpenAIChatCompletionModel chatCompletion = await openAI!.chat.create(
       model: "gpt-3.5-turbo",
-      temperature: 0.7,
+      temperature: 0.89,
       maxTokens: 1000,
       messages: [
         OpenAIChatCompletionChoiceMessageModel(content: userMsg, role: "user"),

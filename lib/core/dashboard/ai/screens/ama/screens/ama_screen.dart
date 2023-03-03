@@ -117,10 +117,21 @@ class _ChatSpace extends StatelessWidget {
           elevation: 8,
           child: Padding(
             padding: const EdgeInsets.all(kPaddingS),
-            child: Text(ama.message,
+            child: Theme(
+              data: ThemeData(
+                textSelectionTheme: TextSelectionThemeData(
+                  selectionColor: ama.isUser ? null : kAccentColor,
+                  selectionHandleColor: ama.isUser ? kRed : kAccentColor,
+                ),
+              ),
+              child: SelectableText(
+                ama.message,
                 style: ama.isUser
                     ? Theme.of(context).textTheme.bodyMedium
-                    : Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite)),
+                    : Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite),
+                scrollPhysics: const ClampingScrollPhysics(),
+              ),
+            ),
           ),
         ),
       ),
