@@ -12,11 +12,9 @@ class AICategoryController with ChangeNotifier {
   ///
   /// 1 - AMA
   ///
-  /// 2 - Did you know?
+  /// 2 - Jokes & Riddles
   ///
-  /// 3 - Jokes & Riddles
-  ///
-  /// 4 - AI Views
+  /// 3 - AI Views
   void controlSelectedAICategory(BuildContext context, {required int categoryCode}) {
     switch (categoryCode) {
       case 1:
@@ -24,12 +22,9 @@ class AICategoryController with ChangeNotifier {
         Navigator.of(context).pushNamed(Routes.ama);
         break;
       case 2:
-        printOut('Did you know?', 'AICategoryController');
-        break;
-      case 3:
         printOut('Jokes & Riddles', 'AICategoryController');
         break;
-      case 4:
+      case 3:
         printOut('Image gen', 'AICategoryController');
         Navigator.of(context).pushNamed(Routes.imagery);
         break;
