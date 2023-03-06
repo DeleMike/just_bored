@@ -1,13 +1,18 @@
 import 'dart:convert';
 
 import 'package:dart_openai/openai.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
+import 'package:just_bored/local/profile_prefs.dart';
+
+import '../../../../../../network/http_client.dart' as client;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:just_bored/configs/constants.dart';
 
 import '../../../../../../configs/debug_fns.dart';
-import '../../../../../../local/profile_prefs.dart';
 import '../models/imagery.dart';
 
 /// Controls all AI imagery functions
@@ -25,6 +30,8 @@ class ImageryController with ChangeNotifier {
 
   /// show if the model is processing data
   bool get isLoading => _isLoading;
+
+  int _groupIdCounter = 1;
 
   /// this will send a prompt to the DALL-E model and get a image url response for the user
   Future<void> sendPrompt({
@@ -44,11 +51,14 @@ class ImageryController with ChangeNotifier {
       printOut('Prompt = $prompt');
       String? uid = ProfilePrefs().getUserId();
 
+      printOut('groupIdCounter = $_groupIdCounter');
+
       _promptsAndImages.add(Imagery.fromjson({
         'id': uid,
         'prompt': prompt,
         'image_url': '',
         'is_user': true,
+        'group_id': _groupIdCounter,
       }));
 
       // reply the user based from their message
@@ -61,12 +71,14 @@ class ImageryController with ChangeNotifier {
         'prompt': '',
         'image_url': generatedImageUrl,
         'is_user': false,
+        'group_id': _groupIdCounter,
       }));
 
       controller.text = '';
       _isLoading = false;
       notifyListeners();
     }
+    ++_groupIdCounter;
   }
 
   /// initialise AI engine for task
@@ -107,6 +119,55 @@ class ImageryController with ChangeNotifier {
 
     printOut('Image url = $url');
     return url;
+  }
+
+  Future<void> saveFavouritePicture(BuildContext context, int groupId, String replyUrl) async {
+    // get the prompt that generated the image
+    String prompt = _promptsAndImages
+        .firstWhere((element) => element.groupId == groupId && element.prompt.isNotEmpty)
+        .prompt;
+
+    printOut('Prompt = $prompt');
+    printOut('replyUrl = $replyUrl');
+
+    // download the image
+    // save it to firebase buckets
+
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (context) => const Center(
+    //     child: CircularProgressIndicator(),
+    //   ),
+    // );
+    // String? uid = FirebaseAuth.instance.currentUser?.uid;
+    // printOut('UID = $uid', 'HomeController');
+    // try {
+    //   final data = {
+    //     'prompt': prompt,
+    //     'image_url': replyUrl,
+    //   };
+
+    //   printOut('Data = $data', 'HomeController');
+
+    //   final response = (await client.HttpClient.instance
+    //       .post(resource: 'favourties/$uid.json', data: jsonEncode(data)) as http.Response);
+
+    //   if (response.statusCode != 200) {
+    //     showToast('Your reflection could not be saved.\n You can try signing in again to add a reflection.');
+    //   } else {
+    //     showToast(
+    //       'Image Saved for you 💖',
+    //       wantsLongText: true,
+    //       wantsCenterMsg: true,
+    //     );
+    //   }
+    // } catch (e, s) {
+    //   //FATAL: Something went wrong in the code (Frontend or Backend)
+    //   printOut('Error Message: $e, $s');
+    // }
+    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    // notifyListeners();
   }
 
   // reset variables state

@@ -146,7 +146,11 @@ class _ImageGenSpace extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const _ImageActionBar(),
+                    _ImageActionBar(
+                      groupId: imagery.groupId,
+                      imageUrl: imagery.imageUrl,
+                      contoller: controller,
+                    ),
                   ],
                 ),
               ),
@@ -159,7 +163,11 @@ class _ImageGenSpace extends StatelessWidget {
 class _ImageActionBar extends StatelessWidget {
   /// contains functions the user can do with the generated image
 
-  const _ImageActionBar();
+  const _ImageActionBar({required this.groupId, required this.imageUrl, required this.contoller});
+
+  final int groupId;
+  final String imageUrl;
+  final ImageryController contoller;
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +183,9 @@ class _ImageActionBar extends StatelessWidget {
               foregroundColor: kWhite,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kSmallRadius)),
             ),
-            onPressed: () {},
+            onPressed: () {
+              contoller.saveFavouritePicture(context, groupId, imageUrl);
+            },
             label: Text('Save', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite)),
             icon: const Icon(
               Icons.favorite_border_outlined,
