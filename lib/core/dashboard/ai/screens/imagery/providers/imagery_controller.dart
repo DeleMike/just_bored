@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dart_openai/openai.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:just_bored/configs/constants.dart';
 
 import '../../../../../../configs/debug_fns.dart';
 import '../../../../../../local/profile_prefs.dart';
@@ -50,7 +53,7 @@ class ImageryController with ChangeNotifier {
 
       // reply the user based from their message
       // await Future.delayed(const Duration(seconds: 2));
-      String? generatedImageUrl  = await _getImageUrlResponse(prompt!, openAiInstance);
+      String? generatedImageUrl = await _getImageUrlResponse(prompt!, openAiInstance);
 
       //kNetworkImage
       _promptsAndImages.add(Imagery.fromjson({
@@ -83,14 +86,26 @@ class ImageryController with ChangeNotifier {
 
   /// reply user based on message sent
   Future<String> _getImageUrlResponse(String prompt, OpenAI? openAI) async {
-    final OpenAIImageModel image = await OpenAI.instance.image.create(
-      prompt: prompt,
-      n: 1,
-      size: OpenAIImageSize.size1024,
-      responseFormat: OpenAIResponseFormat.url,
-    );
+    String url = '';
 
-    String url = image.data.last.url;
+    try {
+      final OpenAIImageModel image = await OpenAI.instance.image.create(
+        prompt: prompt,
+        n: 1,
+        size: OpenAIImageSize.size1024,
+        responseFormat: OpenAIResponseFormat.url,
+      );
+      url = image.data.last.url;
+    } on RequestFailedException catch (e, s) {
+      showToast(
+        'Your prompt may contain text that is not allowed by DALL-E system.',
+        wantsCenterMsg: true,
+        wantsLongText: true,
+      );
+      printOut('An error occured = $e, $s', 'ImageryController');
+    }
+
+    printOut('Image url = $url');
     return url;
   }
 

@@ -3,6 +3,7 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../configs/constants.dart';
+import '../../widgets/close_dialog.dart';
 import '../dashboard/home/screens/home.dart';
 import '../dashboard/ai/screens/ai_home.dart';
 import '../dashboard/personal/screens/personal_screen.dart';
@@ -58,9 +59,19 @@ class _NavScreenState extends State<NavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _navScreens,
+      body: WillPopScope(
+        onWillPop: () async {
+          final wantsToLeave = await closeDialog(context);
+          if (wantsToLeave) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _navScreens,
+        ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,

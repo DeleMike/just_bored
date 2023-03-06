@@ -59,8 +59,13 @@ class _ImageryScreenState extends State<ImageryScreen> {
       ),
       body: WillPopScope(
         onWillPop: () async {
-          imgReader.reset();
-          return true;
+          final wantsToLeave = await closeDialog(context);
+          if (wantsToLeave) {
+            imgReader.reset();
+            return true;
+          } else {
+            return false;
+          }
         },
         child: Column(
           children: [
