@@ -198,7 +198,9 @@ class _ImageActionBar extends StatelessWidget {
               foregroundColor: kWhite,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kSmallRadius)),
             ),
-            onPressed: () {},
+            onPressed: () {
+              contoller.shareToSocial(context, groupId, imageUrl);
+            },
             label: Text('Share', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kWhite)),
             icon: const Icon(
               Icons.share_outlined,

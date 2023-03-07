@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dart_openai/openai.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_database/firebase_database.dart';
+import 'package:just_bored/data/image_download_sharer.dart';
 import 'package:just_bored/data/storage_bucket.dart';
 import 'package:just_bored/local/profile_prefs.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../../../network/http_client.dart' as client;
 import 'package:flutter/foundation.dart';
@@ -111,6 +113,8 @@ class ImageryController with ChangeNotifier {
         responseFormat: OpenAIResponseFormat.url,
       );
       url = image.data.last.url;
+    } on SocketException catch (e) {
+      showToast('Connection timeOut');
     } on RequestFailedException catch (e, s) {
       showToast(
         'Your prompt may contain text that is not allowed by DALL-E system.',
@@ -155,40 +159,73 @@ class ImageryController with ChangeNotifier {
         }
       }
 
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
+      printOut('UID = $uid', 'HomeController');
+      try {
+        final data = {
+          'prompt': imagery.prompt,
+          'image_url': firebaseStorageBucketDownloadUrl,
+        };
+
+        printOut('Data = $data', 'HomeController');
+
+        final response = (await client.HttpClient.instance
+            .post(resource: 'favourites/$uid.json', data: jsonEncode(data)) as http.Response);
+
+        if (response.statusCode != 200) {
+          showToast('Your image data properties could not be uploaded but your image has been saved!');
+        } else {
+          if (context.mounted) {
+            showASnackbar(
+              context,
+              'Image Saved for you 💖',
+            );
+          }
+        }
+      } catch (e, s) {
+        //FATAL: Something went wrong in the code (Frontend or Backend)
+        printOut('Error Message: $e, $s');
+      }
       navigatorKey.currentState!.pop();
       notifyListeners();
-
-      // String? uid = FirebaseAuth.instance.currentUser?.uid;
-      // printOut('UID = $uid', 'HomeController');
-      // try {
-      //   final data = {
-      //     'prompt': prompt,
-      //     'image_url': replyUrl,
-      //   };
-
-      //   printOut('Data = $data', 'HomeController');
-
-      //   final response = (await client.HttpClient.instance
-      //       .post(resource: 'favourties/$uid.json', data: jsonEncode(data)) as http.Response);
-
-      //   if (response.statusCode != 200) {
-      //     showToast('Your reflection could not be saved.\n You can try signing in again to add a reflection.');
-      //   } else {
-      //     showToast(
-      //       'Image Saved for you 💖',
-      //       wantsLongText: true,
-      //       wantsCenterMsg: true,
-      //     );
-      //   }
-      // } catch (e, s) {
-      //   //FATAL: Something went wrong in the code (Frontend or Backend)
-      //   printOut('Error Message: $e, $s');
-      // }
-      // navigatorKey.currentState!.popUntil((route) => route.isFirst);
-      // notifyListeners();
     } else {
       showASnackbar(context, 'This picture is already saved 😊');
     }
+  }
+
+  /// share AI generated picture to socials
+  Future<void> shareToSocial(BuildContext context, int groupId, String imageUrl) async {
+    final time = DateTime.now();
+    // get the prompt that generated the image
+    Imagery imagery =
+        _promptsAndImages.firstWhere((element) => element.groupId == groupId && element.prompt.isNotEmpty);
+    String imgFileName =
+        '${imagery.prompt.toLowerCase().trim().replaceAll(' ', '_')}_${time.toString().trim().replaceAll(' ', '_').replaceAll('-', '_')}';
+
+    // init class
+    final sharer = ImageDownloaderSharer();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // download the image
+    File? file = await sharer.downloadImage(imageUrl, imgFileName);
+
+    // share file
+    try {
+      final shareResult = await Share.shareXFiles([XFile(file!.path)], text: 'Check out this image!');
+      printOut('Share Result Raw data = ${shareResult.raw.toString()}', 'ImageController');
+      printOut('Share Result status index = ${shareResult.status.index}', 'ImageControler');
+      printOut('Share Result status name = ${shareResult.status.name}', 'ImageControler');
+    } catch (e, s) {
+      printOut('Error while sharing file: $e, $s');
+    }
+    navigatorKey.currentState!.pop();
+    notifyListeners();
   }
 
   // reset variables state
