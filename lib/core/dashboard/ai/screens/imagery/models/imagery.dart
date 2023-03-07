@@ -3,7 +3,14 @@ import 'dart:convert';
 /// model data class for image generation screen
 class Imagery {
   /// model data class for image generation screen
-  Imagery({required this.id, required this.prompt, required this.imageUrl, required this.isUser});
+  Imagery({
+    required this.id,
+    required this.prompt,
+    required this.imageUrl,
+    required this.isUser,
+    required this.groupId,
+    required this.isUploaded,
+  });
 
   /// id of the user currently using the application
   final String id;
@@ -17,6 +24,12 @@ class Imagery {
   /// is this the user or AI
   final bool isUser;
 
+  /// the group an image and prompt belongs to
+  final int groupId;
+
+  /// check if it has been uploaded
+  bool isUploaded;
+
   /// change to [Imagery] data model
   factory Imagery.fromjson(Map<String, dynamic> json) {
     return Imagery(
@@ -24,6 +37,8 @@ class Imagery {
       prompt: json['prompt'],
       imageUrl: json['image_url'],
       isUser: json['is_user'],
+      groupId: json['group_id'],
+      isUploaded: json['is_uploaded'],
     );
   }
 
@@ -34,6 +49,8 @@ class Imagery {
       'prompt': prompt,
       'image_url': imageUrl,
       'is_user': isUser,
+      'group_id': groupId,
+      'is_uploaded': isUploaded,
     };
   }
 
@@ -44,6 +61,8 @@ class Imagery {
       'prompt': prompt,
       'image_url': imageUrl,
       'is_user': isUser,
+      'group_id': groupId,
+      'is_uploaded': isUploaded
     });
   }
 }

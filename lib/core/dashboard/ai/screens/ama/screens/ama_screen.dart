@@ -27,7 +27,7 @@ class _AmaScreenState extends State<AmaScreen> {
   _init() async {
     openAI = context.read<AmaController>().initAIEngine();
     printOut('OpenAI Object = $openAI', 'AmaScreen');
-    context.read<AmaController>().initChat(openAI);
+    //context.read<AmaController>().initChat(openAI);
   }
 
   @override
@@ -66,8 +66,13 @@ class _AmaScreenState extends State<AmaScreen> {
       ),
       body: WillPopScope(
         onWillPop: () async {
-          amaReader.reset();
-          return true;
+          final wantsToLeave = await closeDialog(context);
+          if (wantsToLeave) {
+            amaReader.reset();
+            return true;
+          } else {
+            return false;
+          }
         },
         child: Column(
           children: [
@@ -78,6 +83,17 @@ class _AmaScreenState extends State<AmaScreen> {
               ),
             ),
             if (amaWatcher.isLoading) const Center(child: CircularProgressIndicator()),
+            const Divider(
+              color: kPrimaryColor,
+            ),
+            // quick chats options
+            Padding(
+              padding: const EdgeInsets.all(kPaddingS - 5),
+              child: QuickChatOptions(
+                controller: amaReader,
+                openAI: openAI,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(kPaddingS),
               child: _ChatInput(
@@ -87,6 +103,72 @@ class _AmaScreenState extends State<AmaScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class QuickChatOptions extends StatelessWidget {
+  const QuickChatOptions({
+    super.key,
+    required this.controller,
+    required this.openAI,
+  });
+
+  final AmaController controller;
+  final OpenAI? openAI;
+  final kIWannaTalkWithYou = 'Hi, I wanna talk with you?';
+  final kTellMeAnInterestingFact = 'Tell me an interesting fact';
+  final kTellMeAJoke = 'Tell me a joke';
+  final kWriteMeAShortStory = 'Write me a short story';
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPaddingS),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                controller.answerQuickPrompts(openAI, kIWannaTalkWithYou);
+              },
+              icon: const Icon(Icons.favorite),
+              label: Text(kIWannaTalkWithYou),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPaddingS),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                controller.answerQuickPrompts(openAI, kTellMeAnInterestingFact);
+              },
+              icon: const Icon(Icons.travel_explore_sharp),
+              label: Text(kTellMeAnInterestingFact),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPaddingS),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                controller.answerQuickPrompts(openAI, kTellMeAJoke);
+              },
+              icon: const Icon(Icons.sentiment_very_satisfied_rounded),
+              label: Text(kTellMeAJoke),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPaddingS),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                controller.answerQuickPrompts(openAI, kWriteMeAShortStory);
+              },
+              icon: const Icon(Icons.history_edu_outlined),
+              label: Text(kWriteMeAShortStory),
+            ),
+          ),
+        ],
       ),
     );
   }

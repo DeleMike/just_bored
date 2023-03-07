@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,17 +45,18 @@ class AmaController with ChangeNotifier {
       // printOut('OpenAI Instance = $openAiInstance', 'AmaController');
       String? uid = ProfilePrefs().getUserId();
 
-      chats.add(Ama.fromjson({
+      _chats.add(Ama.fromjson({
         'id': uid,
         'message': message,
         'is_user': true,
       }));
+      notifyListeners();
 
       // reply the user based from their message
       String reply = await _sendReply(message!, openAiInstance);
 
       // add to chats array
-      chats.add(
+      _chats.add(
         Ama.fromjson({
           'id': 'just-bored-ai',
           'message': reply,
@@ -64,8 +66,8 @@ class AmaController with ChangeNotifier {
 
       controller.text = '';
       _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   /// initialise AI engine for task
@@ -109,12 +111,72 @@ class AmaController with ChangeNotifier {
     notifyListeners();
   }
 
+  /// answer user's quick prompts
+  Future<void> answerQuickPrompts(OpenAI? openAI, String prompt) async {
+    String? uid = ProfilePrefs().getUserId();
+
+    chats.add(Ama.fromjson({
+      'id': uid,
+      'message': prompt,
+      'is_user': true,
+    }));
+    _isLoading = true;
+    notifyListeners();
+
+    if (prompt == 'Tell me a joke') {
+      // printOut('Equal prompt = $prompt');
+      // give random jokes
+      final jokeTypeList = [
+        ' about life',
+        ' about school',
+        ' about computers',
+        ' about science',
+        ' about music',
+        ' about relationships',
+        ' about foods',
+        ' a Kevin Hart type joke',
+        ' a Dave Chapelle type joke',
+        ' a Chris Rock type joke',
+      ];
+      int number = math.Random().nextInt(jokeTypeList.length);
+      // printOut(number);
+      prompt += jokeTypeList[number];
+     printOut('New Prompt: $prompt');
+    } else if (prompt == 'Write me a short story') {
+      // write a short story
+      final storyTypeList = [
+        ' about life',
+        ' about school',
+        ' about romance',
+        ' about aristotle',
+        ' about science',
+        ' about foods',
+        ' about money'
+      ];
+      int number = math.Random().nextInt(storyTypeList.length);
+      prompt += storyTypeList[number];
+    }
+
+    String reply = await _sendReply(prompt, openAI);
+
+    // add to chats array
+    chats.add(
+      Ama.fromjson({
+        'id': 'just-bored-ai',
+        'message': reply,
+        'is_user': false,
+      }),
+    );
+    _isLoading = false;
+    notifyListeners();
+  }
+
   /// reply user based on message sent
   Future<String> _sendReply(String userMsg, OpenAI? openAI) async {
     final OpenAIChatCompletionModel chatCompletion = await openAI!.chat.create(
       model: "gpt-3.5-turbo",
       temperature: 0.89,
-      maxTokens: 1000,
+      maxTokens: 2000,
       messages: [
         OpenAIChatCompletionChoiceMessageModel(content: userMsg, role: "user"),
       ],

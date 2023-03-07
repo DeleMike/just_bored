@@ -52,6 +52,11 @@ const double kCardElevation = 5.0;
 const double kButtonRadius = 10.0;
 const double kDialogRadius = 20.0;
 
+/// network image used in testing
+const kNetworkImage = 'https://img.freepik.com/free-photo/'
+    'ai-nuclear-energy-background-future-innovation-disruptive-technology_53876-129783.jpg'
+    '?w=740&t=st=1677855821~exp=1677856421~hmac=fc27e1739fc9f328051e5c92426617b94031b0a8d5310aaef174ceb658bec7ab';
+
 /// Get screen height
 double kScreenHeight(BuildContext context) {
   return MediaQuery.of(context).size.height;
@@ -91,7 +96,7 @@ void showToast(String message, {wantsLongText = false, wantsCenterMsg = false}) 
   Fluttertoast.showToast(
       msg: message,
       toastLength: wantsLongText ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT,
-      gravity: wantsCenterMsg ? ToastGravity.CENTER : ToastGravity.BOTTOM ,
+      gravity: wantsCenterMsg ? ToastGravity.CENTER : ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       backgroundColor: kPrimaryColor,
       textColor: kWhite,

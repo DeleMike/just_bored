@@ -39,24 +39,10 @@ class _AIHomeScreenState extends State<AIHomeScreen> {
                 ),
               ),
               _Category(
-                name: 'Did you know?',
-                imagePath: AssetsImages.womanHearingFacts,
-                onPressed: () {
-                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 2);
-                },
-              ),
-              _Category(
-                name: 'Jokes & Riddles',
+                name: 'Imagery',
                 imagePath: AssetsImages.babyLaughing,
                 onPressed: () {
-                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 3);
-                },
-              ),
-              _Category(
-                name: 'Imagery',
-                imagePath: AssetsImages.shareViews,
-                onPressed: () {
-                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 4);
+                  aiControllerReader.controlSelectedAICategory(context, categoryCode: 2);
                 },
               ),
             ],
