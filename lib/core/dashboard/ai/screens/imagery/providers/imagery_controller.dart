@@ -4,6 +4,7 @@ import 'package:dart_openai/openai.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
+import 'package:just_bored/data/storage_bucket.dart';
 import 'package:just_bored/local/profile_prefs.dart';
 
 import '../../../../../../network/http_client.dart' as client;
@@ -59,6 +60,7 @@ class ImageryController with ChangeNotifier {
         'image_url': '',
         'is_user': true,
         'group_id': _groupIdCounter,
+        'is_uploaded': false,
       }));
 
       // reply the user based from their message
@@ -72,6 +74,7 @@ class ImageryController with ChangeNotifier {
         'image_url': generatedImageUrl,
         'is_user': false,
         'group_id': _groupIdCounter,
+        'is_uploaded': false,
       }));
 
       controller.text = '';
@@ -123,56 +126,75 @@ class ImageryController with ChangeNotifier {
 
   Future<void> saveFavouritePicture(BuildContext context, int groupId, String replyUrl) async {
     // get the prompt that generated the image
-    String prompt = _promptsAndImages
-        .firstWhere((element) => element.groupId == groupId && element.prompt.isNotEmpty)
-        .prompt;
+    Imagery imagery =
+        _promptsAndImages.firstWhere((element) => element.groupId == groupId && element.prompt.isNotEmpty);
 
-    printOut('Prompt = $prompt');
+    printOut('Prompt = ${imagery.prompt}');
     printOut('replyUrl = $replyUrl');
 
-    // download the image
-    // save it to firebase buckets
+    if (!imagery.isUploaded) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
 
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (context) => const Center(
-    //     child: CircularProgressIndicator(),
-    //   ),
-    // );
-    // String? uid = FirebaseAuth.instance.currentUser?.uid;
-    // printOut('UID = $uid', 'HomeController');
-    // try {
-    //   final data = {
-    //     'prompt': prompt,
-    //     'image_url': replyUrl,
-    //   };
+      // download the image and save it to firebase buckets
+      String firebaseStorageBucketDownloadUrl =
+          await StorageBucketUploader.instance.uploadFavoritePicture(replyUrl, imagery.prompt);
 
-    //   printOut('Data = $data', 'HomeController');
+      showToast('Picture uploaded!');
+      printOut('DownloadURL = $firebaseStorageBucketDownloadUrl');
 
-    //   final response = (await client.HttpClient.instance
-    //       .post(resource: 'favourties/$uid.json', data: jsonEncode(data)) as http.Response);
+      // update the imagery model with groupId = [groupId] to uploaded
+      for (var imagery in _promptsAndImages) {
+        if (imagery.groupId == groupId) {
+          imagery.isUploaded = true;
+        }
+      }
 
-    //   if (response.statusCode != 200) {
-    //     showToast('Your reflection could not be saved.\n You can try signing in again to add a reflection.');
-    //   } else {
-    //     showToast(
-    //       'Image Saved for you 💖',
-    //       wantsLongText: true,
-    //       wantsCenterMsg: true,
-    //     );
-    //   }
-    // } catch (e, s) {
-    //   //FATAL: Something went wrong in the code (Frontend or Backend)
-    //   printOut('Error Message: $e, $s');
-    // }
-    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
-    // notifyListeners();
+      navigatorKey.currentState!.pop();
+      notifyListeners();
+
+      // String? uid = FirebaseAuth.instance.currentUser?.uid;
+      // printOut('UID = $uid', 'HomeController');
+      // try {
+      //   final data = {
+      //     'prompt': prompt,
+      //     'image_url': replyUrl,
+      //   };
+
+      //   printOut('Data = $data', 'HomeController');
+
+      //   final response = (await client.HttpClient.instance
+      //       .post(resource: 'favourties/$uid.json', data: jsonEncode(data)) as http.Response);
+
+      //   if (response.statusCode != 200) {
+      //     showToast('Your reflection could not be saved.\n You can try signing in again to add a reflection.');
+      //   } else {
+      //     showToast(
+      //       'Image Saved for you 💖',
+      //       wantsLongText: true,
+      //       wantsCenterMsg: true,
+      //     );
+      //   }
+      // } catch (e, s) {
+      //   //FATAL: Something went wrong in the code (Frontend or Backend)
+      //   printOut('Error Message: $e, $s');
+      // }
+      // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      // notifyListeners();
+    } else {
+      showASnackbar(context, 'This picture is already saved 😊');
+    }
   }
 
   // reset variables state
   void reset() {
     _promptsAndImages = [];
     _isLoading = false;
+    _groupIdCounter = 1;
   }
 }
