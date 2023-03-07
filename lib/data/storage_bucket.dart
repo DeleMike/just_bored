@@ -25,7 +25,7 @@ class StorageBucketUploader {
       String imgFileName =
           '${fileName.toLowerCase().trim().replaceAll(' ', '_')}_${time.toString().trim().replaceAll(' ', '_').replaceAll('-', '_')}';
 
-      final UploadTask uploadTask = storageRef.child('favorites_images/$imgFileName').putData(bytes);
+      final UploadTask uploadTask = storageRef.child('favorites_images/$imgFileName.png').putData(bytes);
 
       // uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
       // }); --- we can listen for app progress

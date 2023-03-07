@@ -114,7 +114,7 @@ class ImageryController with ChangeNotifier {
       );
       url = image.data.last.url;
     } on SocketException catch (e) {
-      showToast('Connection timeOut');
+      showToast('Connection timeOut: $e');
     } on RequestFailedException catch (e, s) {
       showToast(
         'Your prompt may contain text that is not allowed by DALL-E system.',
@@ -200,7 +200,7 @@ class ImageryController with ChangeNotifier {
     Imagery imagery =
         _promptsAndImages.firstWhere((element) => element.groupId == groupId && element.prompt.isNotEmpty);
     String imgFileName =
-        '${imagery.prompt.toLowerCase().trim().replaceAll(' ', '_')}_${time.toString().trim().replaceAll(' ', '_').replaceAll('-', '_')}';
+        '${imagery.prompt.toLowerCase().trim().replaceAll(' ', '_')}_${time.toString().trim().replaceAll(' ', '_').replaceAll('-', '_')}.png';
 
     // init class
     final sharer = ImageDownloaderSharer();
@@ -217,10 +217,20 @@ class ImageryController with ChangeNotifier {
 
     // share file
     try {
-      final shareResult = await Share.shareXFiles([XFile(file!.path)], text: 'Check out this image!');
-      printOut('Share Result Raw data = ${shareResult.raw.toString()}', 'ImageController');
-      printOut('Share Result status index = ${shareResult.status.index}', 'ImageControler');
-      printOut('Share Result status name = ${shareResult.status.name}', 'ImageControler');
+      // ignore: unused_local_variable
+      final shareResult = await Share.shareXFiles(
+        [
+          XFile(
+            file!.path,
+            mimeType: 'image/png',
+          )
+        ],
+        text: imagery.prompt,
+      );
+      // printOut('Share Result Raw data = ${shareResult.raw.toString()}', 'ImageController');
+      // printOut('Share Result status index = ${shareResult.status.index}', 'ImageControler');
+      // printOut('Share Result status name = ${shareResult.status.name}', 'ImageControler');
+      showToast('Image Shared!');
     } catch (e, s) {
       printOut('Error while sharing file: $e, $s');
     }
