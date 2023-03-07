@@ -56,6 +56,7 @@ dependencies:
   bubble: ^1.2.1
   flutter_dotenv: ^5.0.2
   dart_openai: ^1.5.5
+  firebase_storage: ^11.0.14
 
 dev_dependencies:
   flutter_test:
