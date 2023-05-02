@@ -1,6 +1,6 @@
 # Just Bored
 
-A mental health app made to keep you calm, bored and probably fall asleep!
+A mental health app that uses ChatGPT for chatting and image generation. The Boring App.
 
 The idea is you are kind of tired, maybe you have done a lot today(good!), and you feel like sharing with someone how you feel. Well we are here for you! Just set your mood, have an engaging conversation with our system, hear jokes, solve a riddle, hear some intersting facts have some reflection (Reflection > Reputation), and many more!
 
