@@ -12,6 +12,9 @@ Note the conversations MIGHT BE LIMITED
 |-----------|
 | ![auth_screen](gt_images/auth_screen.png) |
 | ![home_screen](gt_images/home_screen.png) |
+| ![ai_options](gt_images/ai_options.png) |
+| ![text_to_image](gt_images/image_generation.png) |
+| ![personal](gt_images/personal.png) |
 
 Design inspiration from [Dribble](https://dribbble.com/shots/19206709-Mental-Health-App-Design?utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=anatoliydes&utm_content=Mental%20Health%20App%20Design&utm_medium=Social_Share)
 
